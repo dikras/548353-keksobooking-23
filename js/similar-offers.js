@@ -1,126 +1,66 @@
-// Модуль создания и работы с похожими объявлениями
+import { createOffers } from './data.js';
 
-import { getRandomInteger, getRandomFloat, getRandomItem, getRandomFeatures } from './utils.js';
+const mapCanvas = document.querySelector('#map-canvas');
+const similarOfferTemplate = document.querySelector('#card').content.querySelector('.popup');
 
-// Фиксированные значения
-const AVATARS = [
-  'img/avatars/user01.png',
-  'img/avatars/user02.png',
-  'img/avatars/user03.png',
-  'img/avatars/user04.png',
-  'img/avatars/user05.png',
-  'img/avatars/user06.png',
-  'img/avatars/user07.png',
-  'img/avatars/user08.png',
-];
+const similarOffers = createOffers();
 
-const TITLES = [
-  'Дворец с теремом и резными башенками',
-  'Уютная квартирка с видом на старую площадь',
-  'Дом в викторианском стиле с настоящим дворецким',
-  'Тропическое бунгало в центре современного мегаполиса',
-  'Многозвездочный отель с круглосуточной спа-зоной',
-  'Деревянный домик с расписными ставнями',
-  'Двухэтажное бунгало на сваях и с прозрачным полом',
-  'Дворец в стиле венецианское барокко',
-];
+similarOffers.forEach((similarOffer) => {
+  const offerElement = similarOfferTemplate.cloneNode(true);
+  const matchHousingType = () => {
+    switch (similarOffer.offer.type) {
+      case 'flat':
+        return 'Квартира';
+      case 'bungalow':
+        return 'Бунгало';
+      case 'house':
+        return 'Дом';
+      case 'palace':
+        return 'Дворец';
+      case 'hotel':
+        return 'Отель';
+    }
+  };
+  offerElement.querySelector('.popup__avatar').src = similarOffer.author;
+  offerElement.querySelector('.popup__title').textContent = similarOffer.offer.title;
+  offerElement.querySelector('.popup__text--address').textContent = similarOffer.offer.address;
+  offerElement.querySelector('.popup__text--price').textContent = `${similarOffer.offer.price} ₽/ночь`;
+  offerElement.querySelector('.popup__type').textContent = matchHousingType();
+  offerElement.querySelector('.popup__text--capacity').textContent = `${similarOffer.offer.rooms} комнаты для ${similarOffer.offer.guests} гостей`;
+  offerElement.querySelector('.popup__text--time').textContent = `Заезд после ${similarOffer.offer.checkin}, выезд до ${similarOffer.offer.checkout}`;
 
-const TYPES = [
-  'palace',
-  'flat',
-  'house',
-  'bungalow',
-  'hotel',
-];
+  offerElement.querySelector('.popup__description').textContent = similarOffer.offer.description;
 
-const CHECKIN_TIMES = [
-  '12:00',
-  '13:00',
-  '14:00',
-];
-
-const CHECKOUT_TIMES = [
-  '12:00',
-  '13:00',
-  '14:00',
-];
-
-const FEATURES = [
-  'wifi',
-  'dishwasher',
-  'parking',
-  'washer',
-  'elevator',
-  'conditioner',
-];
-
-const PHOTOS = [
-  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
-  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
-  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',
-];
-
-const Price = {
-  MIN: 1000,
-  MAX: 300000,
-};
-
-const Room = {
-  MIN: 2,
-  MAX: 20,
-};
-
-const Guest = {
-  MIN: 1,
-  MAX: 40,
-};
-
-const Latitude = {
-  MIN: 35.65000,
-  MAX: 35.70000,
-};
-
-const Longitude = {
-  MIN: 139.70000,
-  MAX: 139.80000,
-};
-
-const DIGITS_COUNT = 5;
-
-const SIMILAR_OFFERS_COUNT = 10;
-
-const getStringLocation = () => {
-  const latitude = getRandomFloat(Latitude.MIN, Latitude.MAX, DIGITS_COUNT);
-  const longitude = getRandomFloat(Longitude.MIN, Longitude.MAX, DIGITS_COUNT);
-
-  return `${latitude}, ${longitude}`;
-
-};
-
-// Создание массива похожих объявлений
-const createOffer = () => (
-  {
-    author: getRandomItem(AVATARS),
-    offer: {
-      title: getRandomItem(TITLES),
-      address: getStringLocation(),
-      price: getRandomInteger(Price.MIN, Price.MAX),
-      type: getRandomItem(TYPES),
-      rooms: getRandomInteger(Room.MIN, Room.MAX),
-      guests: getRandomInteger(Guest.MIN, Guest.MAX),
-      checkin: getRandomItem(CHECKIN_TIMES),
-      checkout: getRandomItem(CHECKOUT_TIMES),
-      features: getRandomFeatures(FEATURES),
-      description: 'Удобное расположение, оригинальный дизайн комнат, прекрасные виды из окон.',
-      photos: getRandomFeatures(PHOTOS),
-    },
-    location: {
-      lat: getRandomFloat(Latitude.MIN, Latitude.MAX, DIGITS_COUNT),
-      lng: getRandomFloat(Longitude.MIN, Longitude.MAX, DIGITS_COUNT),
-    },
+  // Вывод фотографий
+  const photosBlock = offerElement.querySelector('.popup__photos');
+  const photoElement = photosBlock.querySelector('.popup__photo');
+  photosBlock.removeChild(photoElement);
+  const fragment = document.createDocumentFragment();
+  for (let index = 0; index < similarOffer.offer.photos.length; index++) {
+    const photoNewElement = photoElement.cloneNode(true);
+    photoNewElement.src = similarOffer.offer.photos[index];
+    fragment.appendChild(photoNewElement);
   }
-);
+  photosBlock.appendChild(fragment);
 
-const similarOffers = new Array(SIMILAR_OFFERS_COUNT).fill(null).map(() => createOffer());
+  // Вывод доступных удобств
+  const featuresList = offerElement.querySelector('.popup__features');
+  // Сначала очищаем список с удобствами
+  while (featuresList.firstChild) {
+    featuresList.removeChild(featuresList.firstChild);
+  }
+  // Затем добавляем в него новые удобства
+  for (let index = 0; index < similarOffer.offer.features.length; index++) {
+    const featureNewElement = document.createElement('li');
+    featureNewElement.classList.add('popup__feature');
+    featureNewElement.classList.add(`popup__feature--${similarOffer.offer.features[index]}`);
+    fragment.appendChild(featureNewElement);
+  }
+  featuresList.appendChild(fragment);
 
-export { similarOffers };
+  // Проверяем, если не хватает данных, например, отсутствует описание, то скрываем блок
+  if (similarOffer.offer.description === '') {
+    offerElement.querySelector('.popup__description').classList.add('hidden');
+  }
+  mapCanvas.appendChild(offerElement);
+});
