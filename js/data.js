@@ -24,13 +24,13 @@ const TITLES = [
   'Дворец в стиле венецианское барокко',
 ];
 
-const TYPES = [
-  'palace',
-  'flat',
-  'house',
-  'bungalow',
-  'hotel',
-];
+const Types = {
+  palace: 'Дворец',
+  flat: 'Квартира',
+  house: 'Дом',
+  bungalow: 'Бунгало',
+  hotel: 'Отель',
+};
 
 const CHECKIN_TIMES = [
   '12:00',
@@ -86,7 +86,7 @@ const Longitude = {
 
 const DIGITS_COUNT = 5;
 
-const SIMILAR_OFFERS_COUNT = 10;
+const SIMILAR_OFFERS_COUNT = 1;
 
 const getStringLocation = () => {
   const latitude = getRandomFloat(Latitude.MIN, Latitude.MAX, DIGITS_COUNT);
@@ -104,7 +104,7 @@ const createOffer = () => (
       title: getRandomItem(TITLES),
       address: getStringLocation(),
       price: getRandomInteger(Price.MIN, Price.MAX),
-      type: getRandomItem(TYPES),
+      type: getRandomItem(Object.values(Types)),
       rooms: getRandomInteger(Room.MIN, Room.MAX),
       guests: getRandomInteger(Guest.MIN, Guest.MAX),
       checkin: getRandomItem(CHECKIN_TIMES),
