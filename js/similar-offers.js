@@ -7,25 +7,11 @@ const similarOffers = createOffers();
 
 similarOffers.forEach((similarOffer) => {
   const offerElement = similarOfferTemplate.cloneNode(true);
-  const matchHousingType = () => {
-    switch (similarOffer.offer.type) {
-      case 'flat':
-        return 'Квартира';
-      case 'bungalow':
-        return 'Бунгало';
-      case 'house':
-        return 'Дом';
-      case 'palace':
-        return 'Дворец';
-      case 'hotel':
-        return 'Отель';
-    }
-  };
   offerElement.querySelector('.popup__avatar').src = similarOffer.author;
   offerElement.querySelector('.popup__title').textContent = similarOffer.offer.title;
   offerElement.querySelector('.popup__text--address').textContent = similarOffer.offer.address;
   offerElement.querySelector('.popup__text--price').textContent = `${similarOffer.offer.price} ₽/ночь`;
-  offerElement.querySelector('.popup__type').textContent = matchHousingType();
+  offerElement.querySelector('.popup__type').textContent = similarOffer.offer.type;
   offerElement.querySelector('.popup__text--capacity').textContent = `${similarOffer.offer.rooms} комнаты для ${similarOffer.offer.guests} гостей`;
   offerElement.querySelector('.popup__text--time').textContent = `Заезд после ${similarOffer.offer.checkin}, выезд до ${similarOffer.offer.checkout}`;
 
@@ -46,9 +32,10 @@ similarOffers.forEach((similarOffer) => {
   // Вывод доступных удобств
   const featuresList = offerElement.querySelector('.popup__features');
   // Сначала очищаем список с удобствами
-  while (featuresList.firstChild) {
+  /* while (featuresList.firstChild) {
     featuresList.removeChild(featuresList.firstChild);
-  }
+  } */
+  featuresList.innerHTML = '';
   // Затем добавляем в него новые удобства
   for (let index = 0; index < similarOffer.offer.features.length; index++) {
     const featureNewElement = document.createElement('li');
