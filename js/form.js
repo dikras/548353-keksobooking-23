@@ -1,9 +1,17 @@
 // Модуль работы с формой подачи объявления
-const ROOMS_CAPACITY = {
-  '1': ['1'],
-  '2': ['1', '2'],
-  '3': ['1', '2', '3'],
-  '100': ['0'],
+const RoomsCapacity = {
+  1: [1],
+  2: [1, 2],
+  3: [1, 2, 3],
+  100: [0],
+};
+
+const HousingMinPrice = {
+  BUNGALOW: 0,
+  FLAT: 1000,
+  HOTEL: 3000,
+  HOUSE: 5000,
+  PALACE: 10000,
 };
 
 const offerForm = document.querySelector('.ad-form');
@@ -13,8 +21,15 @@ const map = document.querySelector('.map');
 const mapFilters = map.querySelector('.map__filters');
 const mapFiltersElements = mapFilters.querySelectorAll('.map__filter');
 
+// DOM-элементы для полей формы
 const roomsNumber = offerForm.querySelector('#room_number');
 const guestsCapacity = offerForm.querySelector('#capacity');
+const typeHousing = offerForm.querySelector('#type');
+const priceHousing = offerForm.querySelector('#price');
+const offerTitle = offerForm.querySelector('#title');
+const offerPrice = offerForm.querySelector('#price');
+const timein = offerForm.querySelector('#timein');
+const timeout = offerForm.querySelector('#timeout');
 
 const deactivatePage = () => {
   offerForm.classList.add('ad-form--disabled');
@@ -46,24 +61,60 @@ const activatePage = () => {
 
 window.addEventListener('click', activatePage); // Проверка: активация формы и фильтров карты по клику в любом месте страницы
 
-const capacityChangeHandler = () => {
-  if (guestsCapacity.options.length > 0) {
-    [].forEach.call(guestsCapacity.options, (item) => {
-      if (ROOMS_CAPACITY[roomsNumber.value][0] === item.value) {
-        item.selected = true;
-      } else {
-        item.selected = false;
-      }
+// Функции для синхронизация полей:
 
-      if (ROOMS_CAPACITY[roomsNumber.value].indexOf(item.value) >= 0) {
-        item.hidden = false;
-      } else {
-        item.hidden = true;
-      }
-    });
-  }
+// 1. "Кол-во комнат" - "Кол-во мест"
+const changeGuests = (event) => {
+  guestsCapacity.querySelectorAll('option').forEach((guest) => {
+    guest.disabled = true;
+  });
+  RoomsCapacity[event.target.value].forEach((item) => {
+    guestsCapacity.querySelector(`option[value="${item}"]`).disabled = false;
+    guestsCapacity.value = item;
+  });
 };
 
-roomsNumber.addEventListener('change', () => {
-  capacityChangeHandler();
+// 2. "Время заезда-выезда"
+const changeTimein = (event) => {
+  const timeinValue = event.target.value;
+  timeout.value = timeinValue;
+};
+
+const changeTimeout = (event) => {
+  const timeoutValue = event.target.value;
+  timein.value = timeoutValue;
+};
+
+// 3. "Тип жилья - мин цена за ночь"
+const changeType = (event) => {
+  const minPrice = HousingMinPrice[event.target.value.toUpperCase()];
+  priceHousing.min = minPrice;
+  priceHousing.placeholder = minPrice;
+};
+
+// Добавление обработчиков на поля формы
+roomsNumber.addEventListener('change', changeGuests);
+timein.addEventListener('change', changeTimein);
+timeout.addEventListener('change', changeTimeout);
+typeHousing.addEventListener('change', changeType);
+
+// Валидиция полей "Заголовок"и "Цена за ночь"
+offerTitle.addEventListener('invalid', () => {
+  if (offerTitle.validity.tooShort) {
+    offerTitle.setCustomValidity('Заголовок должен состоять минимум из 30 символов');
+  } else if (offerTitle.validity.tooLong) {
+    offerTitle.setCustomValidity('Длина заголовка не должна превышать 100 символов');
+  } else if (offerTitle.validity.valueMissing) {
+    offerTitle.setCustomValidity('Обязательное поле');
+  }
+});
+
+offerPrice.addEventListener('invalid', () => {
+  if (offerPrice.validity.tooShort) {
+    offerPrice.setCustomValidity('Цена за ночь не может быть меньше нуля');
+  } else if (offerPrice.validity.tooLong) {
+    offerPrice.setCustomValidity('Цена за ночь не должна превышать 1000000 руб.');
+  } else if (offerPrice.validity.valueMissing) {
+    offerPrice.setCustomValidity('Обязательное поле');
+  }
 });
