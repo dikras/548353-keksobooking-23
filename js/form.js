@@ -30,6 +30,7 @@ const offerTitle = offerForm.querySelector('#title');
 const offerPrice = offerForm.querySelector('#price');
 const timein = offerForm.querySelector('#timein');
 const timeout = offerForm.querySelector('#timeout');
+const address = offerForm.querySelector('#address');
 
 const deactivatePage = () => {
   offerForm.classList.add('ad-form--disabled');
@@ -55,16 +56,12 @@ const activatePage = () => {
   mapFiltersElements.forEach((element) => {
     element.removeAttribute('disabled');
   });
-
-  window.removeEventListener('click', activatePage); // Удаляем обработчик после активации страницы
 };
-
-window.addEventListener('click', activatePage); // Проверка: активация формы и фильтров карты по клику в любом месте страницы
 
 // Функции для синхронизация полей:
 
 // 1. "Кол-во комнат" - "Кол-во мест"
-const changeGuests = (event) => {
+const mapCapacityToGuestsCount = (event) => {
   guestsCapacity.querySelectorAll('option').forEach((guest) => {
     guest.disabled = true;
   });
@@ -75,28 +72,28 @@ const changeGuests = (event) => {
 };
 
 // 2. "Время заезда-выезда"
-const changeTimein = (event) => {
+const mapTimeinToTimeout = (event) => {
   const timeinValue = event.target.value;
   timeout.value = timeinValue;
 };
 
-const changeTimeout = (event) => {
+const mapTimeoutToTimein = (event) => {
   const timeoutValue = event.target.value;
   timein.value = timeoutValue;
 };
 
 // 3. "Тип жилья - мин цена за ночь"
-const changeType = (event) => {
+const mapTypeToMinPrice = (event) => {
   const minPrice = HousingMinPrice[event.target.value.toUpperCase()];
   priceHousing.min = minPrice;
   priceHousing.placeholder = minPrice;
 };
 
 // Добавление обработчиков на поля формы
-roomsNumber.addEventListener('change', changeGuests);
-timein.addEventListener('change', changeTimein);
-timeout.addEventListener('change', changeTimeout);
-typeHousing.addEventListener('change', changeType);
+roomsNumber.addEventListener('change', mapCapacityToGuestsCount);
+timein.addEventListener('change', mapTimeinToTimeout);
+timeout.addEventListener('change', mapTimeoutToTimein);
+typeHousing.addEventListener('change', mapTypeToMinPrice);
 
 // Валидиция полей "Заголовок"и "Цена за ночь"
 offerTitle.addEventListener('invalid', () => {
@@ -106,7 +103,11 @@ offerTitle.addEventListener('invalid', () => {
     offerTitle.setCustomValidity('Длина заголовка не должна превышать 100 символов');
   } else if (offerTitle.validity.valueMissing) {
     offerTitle.setCustomValidity('Обязательное поле');
+  } else {
+    offerTitle.setCustomValidity('');
   }
+
+  offerTitle.reportValidity();
 });
 
 offerPrice.addEventListener('invalid', () => {
@@ -116,5 +117,11 @@ offerPrice.addEventListener('invalid', () => {
     offerPrice.setCustomValidity('Цена за ночь не должна превышать 1000000 руб.');
   } else if (offerPrice.validity.valueMissing) {
     offerPrice.setCustomValidity('Обязательное поле');
+  } else {
+    offerPrice.setCustomValidity('');
   }
+
+  offerPrice.reportValidity();
 });
+
+export { activatePage, address };

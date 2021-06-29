@@ -86,7 +86,7 @@ const Longitude = {
 
 const DIGITS_COUNT = 5;
 
-const SIMILAR_OFFERS_COUNT = 1;
+const SIMILAR_OFFERS_COUNT = 10;
 
 const getStringLocation = () => {
   const latitude = getRandomFloat(Latitude.MIN, Latitude.MAX, DIGITS_COUNT);
