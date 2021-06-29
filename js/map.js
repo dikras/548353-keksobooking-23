@@ -169,11 +169,11 @@ similarOffersPins.forEach((similarOffer) => {
 
 /* resetButton.addEventListener('click', () => {
   mainMarker.setLatLng({
-    lat: 35.67980,
-    lng: 139.76941,
+    lat: InitialSettingMap.LAT,
+    lng: InitialSettingMap.LNG,
   });
   map.setView({
-    lat: 35.67980,
-    lng: 139.76941,
-  });
+    lat: InitialSettingMap.LAT,
+    lng: InitialSettingMap.LNG,
+  }, InitialSettingMap.ZOOM);
 }); */
