@@ -1,5 +1,5 @@
 // Модуль работы с формой подачи объявления
-// import { mapFilters, mapFiltersElements } from './filters.js';
+import { resetPage } from './page.js';
 
 const RoomsCapacity = {
   1: [1],
@@ -18,6 +18,7 @@ const HousingMinPrice = {
 
 const offerForm = document.querySelector('.ad-form');
 const offerFormElements = offerForm.querySelectorAll('.ad-form__element');
+const resetFormButton = offerForm.querySelector('.ad-form__reset');
 
 // DOM-элементы для полей формы
 const roomsNumber = offerForm.querySelector('#room_number');
@@ -66,31 +67,27 @@ timein.addEventListener('change', timeinClickHandler);
 timeout.addEventListener('change', timeoutClickHandler);
 typeHousing.addEventListener('change', typeHousingClickHandler);
 
-// Сброс цвета границ полей
-const resetBorderColor = (element) =>{
-  element.style.borderColor = '#d9d9d3';
-  element.style.borderWidth = '1px';
+// ОТПРАВКА ДАННЫХ
+const setOfferFormSubmit = (onSuccess) => {
+  offerForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    const formData = new FormData(evt.target);
+
+    fetch(
+      'https://23.javascript.pages.academy/keksobooking',
+      {
+        method: 'POST',
+        body: formData,
+      },
+    ).then(() => onSuccess());
+
+    resetPage();
+  });
 };
 
-// ОТПРАВКА ДАННЫХ
-offerForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
 
-  const formData = new FormData(evt.target);
-
-  fetch(
-    'https://23.javascript.pages.academy/keksobooking',
-    {
-      method: 'POST',
-      body: formData,
-    },
-  );
-
-  offerForm.reset();
-  resetBorderColor(offerTitle);
-  resetBorderColor(offerPrice);
-  resetBorderColor(typeHousing);
-});
+resetFormButton.addEventListener('click', resetPage);
 
 /* const deactivatePage = () => {
   offerForm.classList.add('ad-form--disabled');
@@ -102,10 +99,7 @@ offerForm.addEventListener('submit', (evt) => {
   mapFiltersElements.forEach((element) => {
     element.setAttribute('disabled', true);
   });
-};
-
-deactivatePage(); */
+}; */
 
 
-export { offerForm, offerFormElements, offerTitle, offerPrice, address,
-  typeHousing, roomsNumber, guestsCapacity };
+export { offerForm, offerFormElements, offerTitle, offerPrice, address, resetFormButton, setOfferFormSubmit};

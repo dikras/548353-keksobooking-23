@@ -1,10 +1,4 @@
-import { offerTitle, offerPrice, typeHousing, roomsNumber, guestsCapacity } from './form.js';
-
-const MIN_LENGTH_TITLE = 30;
-const MAX_LENGTH_TITLE = 100;
-
-const MIN_PRICE = 0;
-const MAX_PRICE = 1000000;
+import { offerTitle, offerPrice } from './form.js';
 
 // Прекрасная небольшая студия на последнем этаже с видом на старую площадь
 
@@ -38,61 +32,7 @@ const onPriceInvalidInput = () => {
   offerPrice.setCustomValidity('');
 };
 
-const setValidFieldBorderColor = (inputField) => {
-  inputField.style.borderColor = '#19e485';
-  inputField.style.borderWidth = '2px';
-  inputField.style.boxShadow = 'none ';
-};
-
-const setInvalidFieldBorderColor = (inputField) => {
-  inputField.style.borderColor = '#ffaa99';
-  inputField.style.borderWidth = '1px';
-  inputField.style.boxShadow = '0 0 2px 2px #ff6547';
-};
-
-const onTitleLengthInput = () => {
-  const valueLength = offerTitle.value.length;
-  if (valueLength >= MIN_LENGTH_TITLE) {
-    setValidFieldBorderColor(offerTitle);
-  }
-  if (valueLength < MIN_LENGTH_TITLE || valueLength > MAX_LENGTH_TITLE) {
-    setInvalidFieldBorderColor(offerTitle);
-  }
-};
-
-const onTypeHousingChange = () => {
-  setValidFieldBorderColor(typeHousing);
-};
-
-const onRoomsNumbergChange = () => {
-  setValidFieldBorderColor(roomsNumber);
-};
-
-const onGuestsCapacityChange = () => {
-  setValidFieldBorderColor(guestsCapacity);
-};
-
-const onPriceValueInput = () => {
-  const valuePrice = offerPrice.value;
-  if (valuePrice >= MIN_PRICE) {
-    setValidFieldBorderColor(offerPrice);
-  }
-  if (valuePrice < MIN_PRICE || valuePrice > MAX_PRICE || !valuePrice) {
-    setInvalidFieldBorderColor(offerPrice);
-  }
-};
-
 // Добавление функций
-offerTitle.addEventListener('input', onTitleLengthInput);
-
-typeHousing.addEventListener('change', onTypeHousingChange);
-
-roomsNumber.addEventListener('change', onRoomsNumbergChange);
-
-guestsCapacity.addEventListener('change', onGuestsCapacityChange);
-
-offerPrice.addEventListener('input', onPriceValueInput);
-
 offerTitle.addEventListener('invalid', onTitleInvalidInput);
 
 offerPrice.addEventListener('invalid', onPriceInvalidInput);

@@ -1,7 +1,5 @@
-// Модуль работы с картой
-import { offerForm, offerFormElements, address } from './form.js';
-import { mapFilters, mapFiltersElements } from './filters.js';
-// import { similarOffersPins, createCustomPopup } from './similar-offers.js';
+import { activatePage, resetPage } from './page.js';
+import { address, resetFormButton } from './form.js';
 
 const ZOOM = 10;
 
@@ -13,18 +11,6 @@ const initialPosition = {
 const mainMarkerSize = {
   WIDTH: 52,
   HEIGHT: 52,
-};
-
-const activatePage = () => {
-  offerForm.classList.remove('ad-form--disabled');
-  offerFormElements.forEach((element) => {
-    element.removeAttribute('disabled');
-  });
-
-  mapFilters.classList.remove('map__filters--disabled');
-  mapFiltersElements.forEach((element) => {
-    element.removeAttribute('disabled');
-  });
 };
 
 const map = L.map('map-canvas')
@@ -61,12 +47,14 @@ const mainMarker = L.marker(
 
 mainMarker.addTo(map);
 
+// Установка в поле адреса начальных координат маркера
 const setMainMarkerInitialPosition = () => {
   address.value = `${mainMarker._latlng.lat}, ${mainMarker._latlng.lng}`;
 };
 
 setMainMarkerInitialPosition();
 
+// Получение текущей позиции маркера и установка в поле адреса
 const getMainMarkerCurrentPosition = (evt) => {
   const currentLatitude = evt.target.getLatLng().lat.toFixed(5);
   const currentLongitude = evt.target.getLatLng().lng.toFixed(5);
@@ -76,7 +64,8 @@ const getMainMarkerCurrentPosition = (evt) => {
 
 mainMarker.on('moveend', getMainMarkerCurrentPosition);
 
-/* resetButton.addEventListener('click', () => {
+// Сброс позиции маркера и карты
+const resetMapPosition = () => {
   mainMarker.setLatLng({
     lat: initialPosition.LAT,
     lng: initialPosition.LNG,
@@ -85,6 +74,13 @@ mainMarker.on('moveend', getMainMarkerCurrentPosition);
     lat: initialPosition.LAT,
     lng: initialPosition.LNG,
   }, ZOOM);
-}); */
+};
+
+// Обработчик кнопки "Очистить"
+resetFormButton.addEventListener('click', () => {
+  resetPage();
+  resetMapPosition();
+  setMainMarkerInitialPosition();
+});
 
 export { map };
