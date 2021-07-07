@@ -1,5 +1,5 @@
-import { activatePage, resetPage } from './page.js';
-import { address, resetFormButton } from './form.js';
+import { offerForm, offerFormElements, resetFormButton, address } from './form.js';
+import { mapFilters, mapFiltersElements } from './filters.js';
 
 const ZOOM = 10;
 
@@ -11,6 +11,18 @@ const initialPosition = {
 const mainMarkerSize = {
   WIDTH: 52,
   HEIGHT: 52,
+};
+
+const activatePage = () => {
+  offerForm.classList.remove('ad-form--disabled');
+  offerFormElements.forEach((element) => {
+    element.removeAttribute('disabled');
+  });
+
+  mapFilters.classList.remove('map__filters--disabled');
+  mapFiltersElements.forEach((element) => {
+    element.removeAttribute('disabled');
+  });
 };
 
 const map = L.map('map-canvas')
@@ -76,11 +88,18 @@ const resetMapPosition = () => {
   }, ZOOM);
 };
 
-// Обработчик кнопки "Очистить"
-resetFormButton.addEventListener('click', () => {
+const resetPage = () => {
+  offerForm.reset();
+  resetMapPosition();
+  mapFilters.reset();
+  setMainMarkerInitialPosition();
+};
+
+resetFormButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
   resetPage();
   resetMapPosition();
   setMainMarkerInitialPosition();
 });
 
-export { map };
+export { map, initialPosition, resetMapPosition, resetPage };

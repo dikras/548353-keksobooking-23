@@ -1,6 +1,4 @@
 // Модуль работы с формой подачи объявления
-import { resetPage } from './page.js';
-
 const RoomsCapacity = {
   1: [1],
   2: [1, 2],
@@ -66,7 +64,5 @@ roomsNumber.addEventListener('change', roomsNumberClickHandler);
 timein.addEventListener('change', timeinClickHandler);
 timeout.addEventListener('change', timeoutClickHandler);
 typeHousing.addEventListener('change', typeHousingClickHandler);
-
-resetFormButton.addEventListener('click', resetPage);
 
 export { offerForm, offerFormElements, offerTitle, offerPrice, address, resetFormButton };

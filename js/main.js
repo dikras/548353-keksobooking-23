@@ -5,7 +5,6 @@ import './form.js';
 import './map.js';
 import './popup.js';
 import './similar-offers.js';
-import './page.js';
 import './api.js';
 import { renderPins } from './similar-offers.js';
 import { openSuccessPopup, openErrorPopup } from './popup.js';

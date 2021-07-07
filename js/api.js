@@ -1,4 +1,4 @@
-import { resetPage } from './page.js';
+import { resetPage } from './map.js';
 import { offerForm } from './form.js';
 import { showAlert } from './util.js';
 
