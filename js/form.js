@@ -67,39 +67,6 @@ timein.addEventListener('change', timeinClickHandler);
 timeout.addEventListener('change', timeoutClickHandler);
 typeHousing.addEventListener('change', typeHousingClickHandler);
 
-// ОТПРАВКА ДАННЫХ
-const setOfferFormSubmit = (onSuccess) => {
-  offerForm.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-
-    const formData = new FormData(evt.target);
-
-    fetch(
-      'https://23.javascript.pages.academy/keksobooking',
-      {
-        method: 'POST',
-        body: formData,
-      },
-    ).then(() => onSuccess());
-
-    resetPage();
-  });
-};
-
-
 resetFormButton.addEventListener('click', resetPage);
 
-/* const deactivatePage = () => {
-  offerForm.classList.add('ad-form--disabled');
-  offerFormElements.forEach((element) => {
-    element.setAttribute('disabled', true);
-  });
-
-  mapFilters.classList.add('map__filters--disabled');
-  mapFiltersElements.forEach((element) => {
-    element.setAttribute('disabled', true);
-  });
-}; */
-
-
-export { offerForm, offerFormElements, offerTitle, offerPrice, address, resetFormButton, setOfferFormSubmit};
+export { offerForm, offerFormElements, offerTitle, offerPrice, address, resetFormButton };
