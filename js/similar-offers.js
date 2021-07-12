@@ -83,6 +83,8 @@ const createCustomPopup = (element) => {
   return popupElement;
 };
 
+const markerGroup = L.layerGroup().addTo(map);
+
 const renderPins = (items) => {
   const similarOffersPins = renderSimilarOffersPins(items);
 
@@ -105,7 +107,7 @@ const renderPins = (items) => {
       },
     );
     marker
-      .addTo(map)
+      .addTo(markerGroup)
       .bindPopup(
         createCustomPopup(similarOffer),
         {
@@ -115,4 +117,4 @@ const renderPins = (items) => {
   });
 };
 
-export {renderPins};
+export { renderPins, markerGroup };
