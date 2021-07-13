@@ -1,10 +1,5 @@
-// Модуль похожих объявлений с метками
 import { map } from './map.js';
-
-const similarMarkerSize = {
-  WIDTH: 40,
-  HEIGHT: 40,
-};
+import { similarMarkerSize } from './consts.js';
 
 const renderSimilarOffersPins = (items) => {
   const points = [];

@@ -1,4 +1,4 @@
-const ALERT_SHOW_TIME = 5000;
+import { ALERT_SHOW_TIME } from './consts.js';
 
 const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
@@ -23,11 +23,4 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-const isInRange = (arr, number) => {
-  const firstIndex = arr[0], lastIndex= arr[arr.length - 1];
-  if (number >= firstIndex && number <= lastIndex) {
-    return true;
-  }
-};
-
-export { isEscEvent, showAlert, isInRange };
+export { isEscEvent, showAlert };

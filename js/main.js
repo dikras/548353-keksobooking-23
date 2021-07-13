@@ -1,18 +1,20 @@
 import './util.js';
-import './filters.js';
+import './avatar.js';
+import './offer-photos.js';
 import './validation.js';
 import './form.js';
 import './map.js';
-/* import './popup.js';
-import './similar-offers.js';
-import './api.js'; */
+import { filterOffers } from './filters.js';
 import { renderPins } from './similar-offers.js';
 import { openSuccessPopup, openErrorPopup } from './popup.js';
-import { getData, sendData } from './api.js';
-import { SIMILAR_OFFERS_COUNT } from './filters.js';
+import { getOffers, sendOffer } from './api.js';
+import { SIMILAR_OFFERS_COUNT } from './consts.js';
+import { debounce } from './utils/debounce.js';
 
-getData((offers) => {
+
+getOffers((offers) => {
   renderPins(offers.slice(0, SIMILAR_OFFERS_COUNT));
+  debounce(filterOffers(offers));
 });
 
-sendData(openSuccessPopup, openErrorPopup);
+sendOffer(openSuccessPopup, openErrorPopup);
