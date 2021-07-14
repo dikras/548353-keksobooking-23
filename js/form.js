@@ -1,18 +1,4 @@
-// Модуль работы с формой подачи объявления
-const RoomsCapacity = {
-  1: [1],
-  2: [1, 2],
-  3: [1, 2, 3],
-  100: [0],
-};
-
-const HousingMinPrice = {
-  BUNGALOW: 0,
-  FLAT: 1000,
-  HOTEL: 3000,
-  HOUSE: 5000,
-  PALACE: 10000,
-};
+import { RoomsCapacity,  HousingMinPrice } from './consts.js';
 
 const offerForm = document.querySelector('.ad-form');
 const offerFormElements = offerForm.querySelectorAll('.ad-form__element');

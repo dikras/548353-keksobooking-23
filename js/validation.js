@@ -1,10 +1,5 @@
 import { offerTitle, offerPrice } from './form.js';
-
-const MIN_LENGTH_TITLE = 30;
-const MAX_LENGTH_TITLE = 100;
-
-const MIN_PRICE = 0;
-const MAX_PRICE = 1000000;
+import { MIN_LENGTH_TITLE, MAX_LENGTH_TITLE, MIN_PRICE, MAX_PRICE } from './consts.js';
 
 const onTitleInvalidInput = () => {
   const valueLength = offerTitle.value.length;

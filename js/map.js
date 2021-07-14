@@ -1,17 +1,9 @@
 import { offerForm, offerFormElements, resetFormButton, address } from './form.js';
-import { mapFilters, mapFiltersElements } from './filters.js';
+import { ZOOM, initialPosition, mainMarkerSize } from './consts.js';
 
-const ZOOM = 10;
-
-const initialPosition = {
-  LAT: 35.67980,
-  LNG: 139.76941,
-};
-
-const mainMarkerSize = {
-  WIDTH: 52,
-  HEIGHT: 52,
-};
+const mapBlock = document.querySelector('.map');
+const mapFilters = mapBlock.querySelector('.map__filters');
+const mapFiltersElements = mapFilters.querySelectorAll('.map__filter');
 
 const activatePage = () => {
   offerForm.classList.remove('ad-form--disabled');
@@ -102,4 +94,4 @@ resetFormButton.addEventListener('click', (evt) => {
   setMainMarkerInitialPosition();
 });
 
-export { map, initialPosition, resetMapPosition, resetPage };
+export { map, initialPosition, resetMapPosition, resetPage, mapFilters, mapFiltersElements };

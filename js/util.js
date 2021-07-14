@@ -1,4 +1,5 @@
-const ALERT_SHOW_TIME = 5000;
+import { ALERT_SHOW_TIME } from './consts.js';
+
 const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
 const showAlert = (message) => {

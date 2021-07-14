@@ -1,10 +1,5 @@
-// Модуль похожих объявлений с метками
 import { map } from './map.js';
-
-const similarMarkerSize = {
-  WIDTH: 40,
-  HEIGHT: 40,
-};
+import { similarMarkerSize } from './consts.js';
 
 const renderSimilarOffersPins = (items) => {
   const points = [];
@@ -83,6 +78,8 @@ const createCustomPopup = (element) => {
   return popupElement;
 };
 
+const markerGroup = L.layerGroup().addTo(map);
+
 const renderPins = (items) => {
   const similarOffersPins = renderSimilarOffersPins(items);
 
@@ -105,7 +102,7 @@ const renderPins = (items) => {
       },
     );
     marker
-      .addTo(map)
+      .addTo(markerGroup)
       .bindPopup(
         createCustomPopup(similarOffer),
         {
@@ -115,4 +112,4 @@ const renderPins = (items) => {
   });
 };
 
-export {renderPins};
+export { renderPins, markerGroup };
