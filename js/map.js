@@ -1,9 +1,9 @@
 import { offerForm, offerFormElements, resetFormButton, address } from './form.js';
-import { ZOOM, initialPosition, mainMarkerSize } from './consts.js';
+import { ZOOM, InitialPosition, MainMarkerSize } from './consts.js';
 
 const mapBlock = document.querySelector('.map');
-const mapFilters = mapBlock.querySelector('.map__filters');
-const mapFiltersElements = mapFilters.querySelectorAll('.map__filter');
+const mapFilter = mapBlock.querySelector('.map__filters');
+const mapFiltersElement = mapFilter.querySelectorAll('.map__filter');
 
 const activatePage = () => {
   offerForm.classList.remove('ad-form--disabled');
@@ -11,8 +11,8 @@ const activatePage = () => {
     element.removeAttribute('disabled');
   });
 
-  mapFilters.classList.remove('map__filters--disabled');
-  mapFiltersElements.forEach((element) => {
+  mapFilter.classList.remove('map__filters--disabled');
+  mapFiltersElement.forEach((element) => {
     element.removeAttribute('disabled');
   });
 };
@@ -20,8 +20,8 @@ const activatePage = () => {
 const map = L.map('map-canvas')
   .on('load', activatePage)
   .setView({
-    lat: initialPosition.LAT,
-    lng: initialPosition.LNG,
+    lat: InitialPosition.LAT,
+    lng: InitialPosition.LNG,
   }, ZOOM);
 
 L.tileLayer(
@@ -34,14 +34,14 @@ L.tileLayer(
 const mainMarkerIcon = L.icon(
   {
     iconUrl: './img/main-pin.svg',
-    iconSize: [mainMarkerSize.WIDTH, mainMarkerSize.HEIGHT],
-    iconAnchor: [mainMarkerSize.WIDTH / 2, mainMarkerSize.HEIGHT],
+    iconSize: [MainMarkerSize.WIDTH, MainMarkerSize.HEIGHT],
+    iconAnchor: [MainMarkerSize.WIDTH / 2, MainMarkerSize.HEIGHT],
   },
 );
 const mainMarker = L.marker(
   {
-    lat: initialPosition.LAT,
-    lng: initialPosition.LNG,
+    lat: InitialPosition.LAT,
+    lng: InitialPosition.LNG,
   },
   {
     draggable: true,
@@ -71,19 +71,19 @@ mainMarker.on('moveend', getMainMarkerCurrentPosition);
 // Сброс позиции маркера и карты
 const resetMapPosition = () => {
   mainMarker.setLatLng({
-    lat: initialPosition.LAT,
-    lng: initialPosition.LNG,
+    lat: InitialPosition.LAT,
+    lng: InitialPosition.LNG,
   });
   map.setView({
-    lat: initialPosition.LAT,
-    lng: initialPosition.LNG,
+    lat: InitialPosition.LAT,
+    lng: InitialPosition.LNG,
   }, ZOOM);
 };
 
 const resetPage = () => {
   offerForm.reset();
   resetMapPosition();
-  mapFilters.reset();
+  mapFilter.reset();
   setMainMarkerInitialPosition();
 };
 
@@ -94,4 +94,4 @@ resetFormButton.addEventListener('click', (evt) => {
   setMainMarkerInitialPosition();
 });
 
-export { map, initialPosition, resetMapPosition, resetPage, mapFilters, mapFiltersElements };
+export { map, resetMapPosition, resetPage, mapFilter, mapFiltersElement };

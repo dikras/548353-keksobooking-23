@@ -1,13 +1,12 @@
-import { FILE_TYPES } from './consts.js';
+import { FILE_TYPES, PreviewPhotoSize } from './consts.js';
 import { offerForm } from './form.js';
 
 const photoChooser = offerForm.querySelector('.ad-form__input');
 const photoPreviewContainer = offerForm.querySelector('.ad-form__photo');
 const photoPreview = document.createElement('img');
 
-photoPreview.width = '70';
-photoPreview.height = '70';
-photoPreview.style.borderStyle = 'none';
+photoPreview.width = PreviewPhotoSize.WIDTH;
+photoPreview.height = PreviewPhotoSize.HEIGHT;
 
 photoPreviewContainer.insertAdjacentElement('afterbegin', photoPreview);
 

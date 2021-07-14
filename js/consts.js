@@ -3,32 +3,40 @@ const ZOOM = 10;
 const ALERT_SHOW_TIME = 5000;
 const ALERT_MESSAGE = 'Не удалось загрузить данные';
 
-const URL_GET = 'https://23.javascript.pages.academy/keksobooking/data';
-const URL_POST = 'https://23.javascript.pages.academy/keksobooking';
-
 const SIMILAR_OFFERS_COUNT = 10;
 const ANY_VALUE = 'any';
 const RADIX = 10;
 
-const MIN_LENGTH_TITLE = 30;
-const MAX_LENGTH_TITLE = 100;
-
-const MIN_PRICE = 0;
-const MAX_PRICE = 1000000;
+const RERENDER_DELAY = 500;
 
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
-const similarMarkerSize = {
+const LengthTitle = {
+  MIN: 30,
+  Max: 100,
+};
+
+const HousingPrice = {
+  MIN: 0,
+  Max: 1000000,
+};
+
+const Url = {
+  GET: 'https://23.javascript.pages.academy/keksobooking/data',
+  POST: 'https://23.javascript.pages.academy/keksobooking',
+};
+
+const SimilarMarkerSize = {
   WIDTH: 40,
   HEIGHT: 40,
 };
 
-const initialPosition = {
+const InitialPosition = {
   LAT: 35.67980,
   LNG: 139.76941,
 };
 
-const mainMarkerSize = {
+const MainMarkerSize = {
   WIDTH: 52,
   HEIGHT: 52,
 };
@@ -63,6 +71,11 @@ const HousingPriceRange = {
   },
 };
 
-export { ZOOM, similarMarkerSize, initialPosition, mainMarkerSize,  SIMILAR_OFFERS_COUNT,
+const PreviewPhotoSize = {
+  WIDTH: '70',
+  HEIGHT: '70',
+};
+
+export { ZOOM, SimilarMarkerSize, InitialPosition, MainMarkerSize,  SIMILAR_OFFERS_COUNT,
   ANY_VALUE, RADIX, HousingPriceRange, ALERT_SHOW_TIME, ALERT_MESSAGE, RoomsCapacity,  HousingMinPrice,
-  MIN_LENGTH_TITLE, MAX_LENGTH_TITLE, MIN_PRICE, MAX_PRICE, URL_GET, URL_POST, FILE_TYPES };
+  LengthTitle, HousingPrice, Url, FILE_TYPES, PreviewPhotoSize, RERENDER_DELAY };

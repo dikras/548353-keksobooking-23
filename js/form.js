@@ -17,7 +17,7 @@ const address = offerForm.querySelector('#address');
 // СИНХРОНИЗАЦИЯ ПОЛЕЙ, ОБРАБОТЧИКИ
 
 // 1. "Кол-во комнат" - "Кол-во мест"
-const roomsNumberClickHandler = (event) => {
+const roomsSelectChangeHandler = (event) => {
   guestsCapacity.querySelectorAll('option').forEach((guest) => {
     guest.disabled = true;
   });
@@ -28,27 +28,27 @@ const roomsNumberClickHandler = (event) => {
 };
 
 // 2. "Время заезда-выезда"
-const timeinClickHandler = (event) => {
+const timeinSelectChangeHandler = (event) => {
   const timeinValue = event.target.value;
   timeout.value = timeinValue;
 };
 
-const timeoutClickHandler = (event) => {
+const timeoutSelectChangeHandler = (event) => {
   const timeoutValue = event.target.value;
   timein.value = timeoutValue;
 };
 
 // 3. "Тип жилья - мин цена за ночь"
-const typeHousingClickHandler = (event) => {
+const typeSelectChangeHandler = (event) => {
   const minPrice = HousingMinPrice[event.target.value.toUpperCase()];
   offerPrice.min = minPrice;
   offerPrice.placeholder = minPrice;
 };
 
 // Добавление обработчиков на поля формы
-roomsNumber.addEventListener('change', roomsNumberClickHandler);
-timein.addEventListener('change', timeinClickHandler);
-timeout.addEventListener('change', timeoutClickHandler);
-typeHousing.addEventListener('change', typeHousingClickHandler);
+roomsNumber.addEventListener('change', roomsSelectChangeHandler);
+timein.addEventListener('change', timeinSelectChangeHandler);
+timeout.addEventListener('change', timeoutSelectChangeHandler);
+typeHousing.addEventListener('change', typeSelectChangeHandler);
 
 export { offerForm, offerFormElements, offerTitle, offerPrice, address, resetFormButton };

@@ -1,40 +1,48 @@
-// import { getOffers } from './api.js';
-import { mapFilters } from './map.js';
+
 import { renderPins, markerGroup } from './similar-offers.js';
 import { SIMILAR_OFFERS_COUNT, ANY_VALUE, RADIX, HousingPriceRange } from './consts.js';
+import { mapFilter } from './map.js';
 
-const filterHousingType = mapFilters.querySelector('#housing-type');
-const filterHousingPrice = mapFilters.querySelector('#housing-price');
-const filterRoomsNumber = mapFilters.querySelector('#housing-rooms');
-const filterGuestsNumber = mapFilters.querySelector('#housing-guests');
-const filterHousingFeatures = mapFilters.querySelector('#housing-features');
+const filterHousingType = mapFilter.querySelector('#housing-type');
+const filterHousingPrice = mapFilter.querySelector('#housing-price');
+const filterRoomsNumber = mapFilter.querySelector('#housing-rooms');
+const filterGuestsNumber = mapFilter.querySelector('#housing-guests');
+// const filterHousingFeatures = mapFilter.querySelector('#housing-features');
 
-// Ф-ии фильтрации
-const filterByHousingType = (ad) => filterHousingType.value === ANY_VALUE ? true : ad.offer.type === filterHousingType.value;
-
-const filterByHousingPrice = (ad) => {
-  const filteringPriceRange = HousingPriceRange[filterHousingPrice.value.toUpperCase()];
-  return filteringPriceRange ? ad.offer.price >= filteringPriceRange.MIN && ad.offer.price <= filteringPriceRange.MAX : true;
-};
-
-const filterByRoomsNumber = (ad) => filterRoomsNumber.value === ANY_VALUE ? true : ad.offer.rooms === parseInt(filterRoomsNumber.value, RADIX);
-
-const filterByGuestsNumber = (ad) => filterGuestsNumber.value === ANY_VALUE ? true : ad.offer.guests === parseInt(filterGuestsNumber.value, RADIX);
-
-const filterByFeatures = (ad) => {
+/* const filterByFeatures = (ad) => {
   if (!ad.offer.features) {
     return false;
   }
   const checkedFeaturesItems = filterHousingFeatures.querySelectorAll('input:checked');
   return Array.from(checkedFeaturesItems).every((element) => ad.offer.features.includes(element.value));
+}; */
+
+const filterOffers = (offer) => {
+  if (filterHousingType.value !== ANY_VALUE && filterHousingType.value !== offer.offer.type) {
+    return false;
+  }
+  const filteringPrice = HousingPriceRange[filterHousingPrice.value.toUpperCase()];
+  if (filterHousingPrice.value !== ANY_VALUE && (offer.offer.price < filteringPrice.MIN || offer.offer.price > filteringPrice.MAX)) {
+    return false;
+  }
+  if (filterRoomsNumber.value !== ANY_VALUE && parseInt(filterRoomsNumber.value, RADIX) !== offer.offer.rooms) {
+    return false;
+  }
+  if (filterGuestsNumber.value !== ANY_VALUE && parseInt(filterGuestsNumber.value, RADIX) !== offer.offer.guests) {
+    return false;
+  }
+
+  return true;
 };
 
-const filterOffers = (offers) => {
-  mapFilters.addEventListener('change', () => {
-    const similarOffers = offers.filter(filterByHousingType).filter(filterByHousingPrice).filter(filterByRoomsNumber).filter(filterByGuestsNumber).filter(filterByFeatures);
-    markerGroup.clearLayers();
-    renderPins(similarOffers.slice(0, SIMILAR_OFFERS_COUNT));
-  });
+const onMapFilterChange = (offers) => {
+  const similarOffers = offers.filter(filterOffers);
+  markerGroup.clearLayers();
+  renderPins(similarOffers.slice(0, SIMILAR_OFFERS_COUNT));
 };
 
-export { filterOffers };
+const setFilterChange = (cb) => {
+  mapFilter.addEventListener('change', cb);
+};
+
+export { setFilterChange, onMapFilterChange };
