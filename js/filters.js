@@ -7,7 +7,7 @@ const filterHousingType = mapFilter.querySelector('#housing-type');
 const filterHousingPrice = mapFilter.querySelector('#housing-price');
 const filterRoomsNumber = mapFilter.querySelector('#housing-rooms');
 const filterGuestsNumber = mapFilter.querySelector('#housing-guests');
-// const filterHousingFeatures = mapFilter.querySelector('#housing-features');
+const filterHousingFeatures = mapFilter.querySelector('#housing-features');
 
 /* const filterByFeatures = (ad) => {
   if (!ad.offer.features) {
@@ -16,6 +16,19 @@ const filterGuestsNumber = mapFilter.querySelector('#housing-guests');
   const checkedFeaturesItems = filterHousingFeatures.querySelectorAll('input:checked');
   return Array.from(checkedFeaturesItems).every((element) => ad.offer.features.includes(element.value));
 }; */
+
+const filterByFeatures = (ad) => {
+  if (!ad.offer.features) {
+    return false;
+  }
+  const checkedFeaturesItems = filterHousingFeatures.querySelectorAll('input:checked');
+  for (const item of checkedFeaturesItems) {
+    if (!ad.offer.features.includes(item.value)) {
+      return false;
+    }
+  }
+  return true;
+};
 
 const filterOffers = (offer) => {
   if (filterHousingType.value !== ANY_VALUE && filterHousingType.value !== offer.offer.type) {
@@ -29,6 +42,10 @@ const filterOffers = (offer) => {
     return false;
   }
   if (filterGuestsNumber.value !== ANY_VALUE && parseInt(filterGuestsNumber.value, RADIX) !== offer.offer.guests) {
+    return false;
+  }
+
+  if (!filterByFeatures(offer)) {
     return false;
   }
 

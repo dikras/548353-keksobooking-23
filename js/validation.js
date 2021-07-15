@@ -1,17 +1,6 @@
 import { offerTitle, offerPrice } from './form.js';
-import { LengthTitle, HousingPrice } from './consts.js';
-
-const TitleInputBorderColor = {
-  GREEN: '#19e485',
-  RED: '#ffaa99',
-};
-
-const TitleInputBorderWidth = {
-  THICK: '2px',
-  THIN: '1px',
-};
-
-const TITLE_INVALID_SHADOW = '0 0 2px 2px #ff6547';
+import { TitleInputBorderColor, TitleInputBorderWidth, LengthTitle,
+  TITLE_INVALID_SHADOW, HousingPrice } from './consts.js';
 
 const titleInvalidHandler = () => {
   const valueLength = offerTitle.value.length;
@@ -32,26 +21,18 @@ const titleInvalidHandler = () => {
   offerTitle.setCustomValidity('');
 };
 
-const setValidBorderColor = (inputField) => {
-  inputField.style.borderColor = TitleInputBorderColor.GREEN;
-  inputField.style.borderWidth = TitleInputBorderWidth.THICK;
-  inputField.style.boxShadow = 'none ';
-};
-
-const setInvalidBorderColor = (inputField) => {
-  inputField.style.borderColor = TitleInputBorderColor.RED;
-  inputField.style.borderWidth = TitleInputBorderWidth.THIN;
-  inputField.style.boxShadow = TITLE_INVALID_SHADOW;
+const isTitleLengthValid = () => {
+  const valueLength = offerTitle.value.length;
+  if (valueLength < LengthTitle.MIN || valueLength > LengthTitle.MAX) {
+    return false;
+  }
+  return true;
 };
 
 const titleLengthHandler = () => {
-  const valueLength = offerTitle.value.length;
-  if (valueLength >= LengthTitle.MIN) {
-    setValidBorderColor(offerTitle);
-  }
-  if (valueLength < LengthTitle.MIN || valueLength > LengthTitle.MAX) {
-    setInvalidBorderColor(offerTitle);
-  }
+  isTitleLengthValid() ? offerTitle.style.borderColor = TitleInputBorderColor.GREEN : offerTitle.style.borderColor = TitleInputBorderColor.RED;
+  isTitleLengthValid() ? offerTitle.style.borderWidth = TitleInputBorderWidth.THICK : offerTitle.style.borderWidth = TitleInputBorderWidth.THIN;
+  isTitleLengthValid() ? offerTitle.style.boxShadow = 'none ' : offerTitle.style.boxShadow = TITLE_INVALID_SHADOW;
 };
 
 const titleReportValidityHandler = () => {

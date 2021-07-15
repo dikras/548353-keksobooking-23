@@ -7,6 +7,7 @@ const photoPreview = document.createElement('img');
 
 photoPreview.width = PreviewPhotoSize.WIDTH;
 photoPreview.height = PreviewPhotoSize.HEIGHT;
+photoPreview.style.border = 'none';
 
 photoPreviewContainer.insertAdjacentElement('afterbegin', photoPreview);
 

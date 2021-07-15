@@ -5,6 +5,20 @@ const mapBlock = document.querySelector('.map');
 const mapFilter = mapBlock.querySelector('.map__filters');
 const mapFiltersElement = mapFilter.querySelectorAll('.map__filter');
 
+const deactivatePage = () => {
+  offerForm.classList.add('ad-form--disabled');
+  offerFormElements.forEach((element) => {
+    element.setAttribute('disabled', 'disabled');
+  });
+
+  mapFilter.classList.add('map__filters--disabled');
+  mapFiltersElement.forEach((element) => {
+    element.setAttribute('disabled', 'disabled');
+  });
+};
+
+deactivatePage();
+
 const activatePage = () => {
   offerForm.classList.remove('ad-form--disabled');
   offerFormElements.forEach((element) => {
