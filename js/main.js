@@ -7,12 +7,12 @@ import {resetPage, setResetButtonClick, renderPins} from './map.js';
 import { openSuccessPopup, openErrorPopup } from './popup.js';
 import { getOffers } from './api.js';
 import { SIMILAR_OFFERS_COUNT, RERENDER_DELAY } from './consts.js';
-import { setFilterChange, mapFilterHandler } from './filters.js';
+import { setFilterChange, mapFiltersHandler } from './filters.js';
 import { debounce } from './utils/debounce.js';
 
 getOffers((offers) => {
   renderPins(offers.slice(0, SIMILAR_OFFERS_COUNT));
-  setFilterChange(() => debounce(mapFilterHandler(offers), RERENDER_DELAY));
+  setFilterChange(() => debounce(mapFiltersHandler(offers), RERENDER_DELAY));
   setResetButtonClick(() => resetPage(offers));
   setFormSubmit(() => resetPage(offers));
 });

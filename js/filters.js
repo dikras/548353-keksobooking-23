@@ -43,7 +43,7 @@ const filterOffers = (offer) => {
   return true;
 };
 
-const mapFilterHandler = (offers) => {
+const mapFiltersChangeHandler = (offers) => {
   const similarOffers = offers.filter(filterOffers);
   markerGroup.clearLayers();
   renderPins(similarOffers.slice(0, SIMILAR_OFFERS_COUNT));
@@ -53,4 +53,4 @@ const setFilterChange = (cb) => {
   mapFilter.addEventListener('change', cb);
 };
 
-export { setFilterChange, mapFilterHandler };
+export { setFilterChange, mapFiltersChangeHandler };

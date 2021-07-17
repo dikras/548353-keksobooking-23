@@ -1,7 +1,7 @@
 import { offerTitle, offerPrice } from './form.js';
 import { HousingPrice } from './consts.js';
 
-const titleInvalidHandler = () => {
+const titleInvalidInputHandler = () => {
   if (offerTitle.validity.valueMissing) {
     offerTitle.setCustomValidity('Это обязательное поле');
     return;
@@ -17,7 +17,7 @@ const titleInvalidHandler = () => {
   offerTitle.setCustomValidity('');
 };
 
-const priceInvalidHandler = () => {
+const priceInvalidInputHandler = () => {
   if (offerPrice.validity.valueMissing) {
     offerPrice.setCustomValidity('Это обязательное поле');
     return;
@@ -32,6 +32,6 @@ const priceInvalidHandler = () => {
   offerPrice.setCustomValidity('');
 };
 
-offerTitle.addEventListener('invalid', titleInvalidHandler);
+offerTitle.addEventListener('invalid', titleInvalidInputHandler);
 
-offerPrice.addEventListener('invalid', priceInvalidHandler);
+offerPrice.addEventListener('invalid', priceInvalidInputHandler);
