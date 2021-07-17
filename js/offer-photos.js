@@ -7,11 +7,10 @@ const photoPreview = document.createElement('img');
 
 photoPreview.width = PreviewPhotoSize.WIDTH;
 photoPreview.height = PreviewPhotoSize.HEIGHT;
-photoPreview.style.border = 'none';
 
-photoPreviewContainer.insertAdjacentElement('afterbegin', photoPreview);
+const previewUploadHandler = () => {
+  photoPreviewContainer.insertAdjacentElement('afterbegin', photoPreview);
 
-photoChooser.addEventListener('change', () => {
   const file = photoChooser.files[0];
   const fileName = file.name.toLowerCase();
 
@@ -26,4 +25,12 @@ photoChooser.addEventListener('change', () => {
 
     reader.readAsDataURL(file);
   }
-});
+};
+
+photoChooser.addEventListener('change', previewUploadHandler);
+
+const resetPhotorPreview = () => {
+  photoPreview.remove();
+};
+
+export { resetPhotorPreview };

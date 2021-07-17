@@ -1,9 +1,6 @@
-import { map } from './map.js';
-import { SimilarMarkerSize } from './consts.js';
-
 const createSimilarOffersPins = (ads) => {
   const pins = [];
-  ads.forEach((item) => {
+  ads.map((item) => {
     const pin = {
       src: item.author.avatar,
       title: item.offer.title,
@@ -82,38 +79,4 @@ const createPopup = (ad) => {
   return popupElement;
 };
 
-const markerGroup = L.layerGroup().addTo(map);
-
-const renderPins = (ads) => {
-  const similarOffersPins = createSimilarOffersPins(ads);
-
-  similarOffersPins.forEach((similarOffer) => {
-    const {lat, lng} = similarOffer;
-
-    const icon = L.icon({
-      iconUrl: './img/pin.svg',
-      iconSize: [SimilarMarkerSize.WIDTH, SimilarMarkerSize.HEIGHT],
-      iconAnchor: [SimilarMarkerSize.WIDTH / 2, SimilarMarkerSize.HEIGHT],
-    });
-
-    const marker = L.marker(
-      {
-        lat,
-        lng,
-      },
-      {
-        icon,
-      },
-    );
-    marker
-      .addTo(markerGroup)
-      .bindPopup(
-        createPopup(similarOffer),
-        {
-          keepInView: true,
-        },
-      );
-  });
-};
-
-export { renderPins, markerGroup };
+export { createSimilarOffersPins, createPopup };

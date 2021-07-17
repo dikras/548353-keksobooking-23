@@ -1,5 +1,4 @@
-
-import { renderPins, markerGroup } from './similar-offers.js';
+import { renderPins, markerGroup } from './map.js';
 import { SIMILAR_OFFERS_COUNT, ANY_VALUE, RADIX, HousingPriceRange } from './consts.js';
 import { mapFilter } from './map.js';
 
@@ -8,14 +7,6 @@ const filterHousingPrice = mapFilter.querySelector('#housing-price');
 const filterRoomsNumber = mapFilter.querySelector('#housing-rooms');
 const filterGuestsNumber = mapFilter.querySelector('#housing-guests');
 const filterHousingFeatures = mapFilter.querySelector('#housing-features');
-
-/* const filterByFeatures = (ad) => {
-  if (!ad.offer.features) {
-    return false;
-  }
-  const checkedFeaturesItems = filterHousingFeatures.querySelectorAll('input:checked');
-  return Array.from(checkedFeaturesItems).every((element) => ad.offer.features.includes(element.value));
-}; */
 
 const filterByFeatures = (ad) => {
   if (!ad.offer.features) {
@@ -52,7 +43,7 @@ const filterOffers = (offer) => {
   return true;
 };
 
-const onMapFilterChange = (offers) => {
+const mapFilterHandler = (offers) => {
   const similarOffers = offers.filter(filterOffers);
   markerGroup.clearLayers();
   renderPins(similarOffers.slice(0, SIMILAR_OFFERS_COUNT));
@@ -62,4 +53,4 @@ const setFilterChange = (cb) => {
   mapFilter.addEventListener('change', cb);
 };
 
-export { setFilterChange, onMapFilterChange };
+export { setFilterChange, mapFilterHandler };

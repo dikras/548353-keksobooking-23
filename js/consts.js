@@ -11,22 +11,10 @@ const RERENDER_DELAY = 500;
 
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
-const TitleInputBorderColor = {
-  GREEN: '#19e485',
-  RED: '#ffaa99',
-};
-
-const TitleInputBorderWidth = {
-  THICK: '2px',
-  THIN: '1px',
-};
-
 const LengthTitle = {
   MIN: 30,
   Max: 100,
 };
-
-const TITLE_INVALID_SHADOW = '0 0 2px 2px #ff6547';
 
 const HousingPrice = {
   MIN: 0,
@@ -88,8 +76,9 @@ const PreviewPhotoSize = {
   HEIGHT: '70',
 };
 
+const AVATAR_URL = 'img/muffin-grey.svg';
+
 export { ZOOM, SimilarMarkerSize, InitialPosition, MainMarkerSize,
-  SIMILAR_OFFERS_COUNT ,TitleInputBorderColor, TitleInputBorderWidth,
-  LengthTitle, TITLE_INVALID_SHADOW, ANY_VALUE, RADIX, HousingPriceRange,
+  SIMILAR_OFFERS_COUNT, LengthTitle, ANY_VALUE, RADIX, HousingPriceRange,
   ALERT_SHOW_TIME, ALERT_MESSAGE, RoomsCapacity,  HousingMinPrice,
-  HousingPrice, Url, FILE_TYPES, PreviewPhotoSize, RERENDER_DELAY };
+  HousingPrice, Url, FILE_TYPES, PreviewPhotoSize, AVATAR_URL, RERENDER_DELAY };

@@ -1,10 +1,10 @@
 import { RoomsCapacity,  HousingMinPrice } from './consts.js';
+import { sendData } from './api.js';
 
 const offerForm = document.querySelector('.ad-form');
 const offerFormElements = offerForm.querySelectorAll('.ad-form__element');
 const resetFormButton = offerForm.querySelector('.ad-form__reset');
 
-// DOM-элементы для полей формы
 const roomsNumber = offerForm.querySelector('#room_number');
 const guestsCapacity = offerForm.querySelector('#capacity');
 const typeHousing = offerForm.querySelector('#type');
@@ -14,9 +14,6 @@ const timein = offerForm.querySelector('#timein');
 const timeout = offerForm.querySelector('#timeout');
 const address = offerForm.querySelector('#address');
 
-// СИНХРОНИЗАЦИЯ ПОЛЕЙ, ОБРАБОТЧИКИ
-
-// 1. "Кол-во комнат" - "Кол-во мест"
 const roomsSelectChangeHandler = (event) => {
   guestsCapacity.querySelectorAll('option').forEach((guest) => {
     guest.disabled = true;
@@ -27,7 +24,6 @@ const roomsSelectChangeHandler = (event) => {
   });
 };
 
-// 2. "Время заезда-выезда"
 const timeinSelectChangeHandler = (event) => {
   const timeinValue = event.target.value;
   timeout.value = timeinValue;
@@ -38,17 +34,29 @@ const timeoutSelectChangeHandler = (event) => {
   timein.value = timeoutValue;
 };
 
-// 3. "Тип жилья - мин цена за ночь"
 const typeSelectChangeHandler = (event) => {
   const minPrice = HousingMinPrice[event.target.value.toUpperCase()];
   offerPrice.min = minPrice;
   offerPrice.placeholder = minPrice;
 };
 
-// Добавление обработчиков на поля формы
+const setFormSubmit = (onSuccess, onFail, cb) => {
+  offerForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    sendData(
+      () => onSuccess(),
+      () => onFail(),
+      new FormData(evt.target),
+    );
+    cb;
+  });
+};
+
 roomsNumber.addEventListener('change', roomsSelectChangeHandler);
 timein.addEventListener('change', timeinSelectChangeHandler);
 timeout.addEventListener('change', timeoutSelectChangeHandler);
 typeHousing.addEventListener('change', typeSelectChangeHandler);
 
-export { offerForm, offerFormElements, offerTitle, offerPrice, address, resetFormButton };
+export { offerForm, offerFormElements, offerTitle, offerPrice, address,
+  resetFormButton, setFormSubmit };

@@ -1,5 +1,3 @@
-import { resetPage } from './map.js';
-import { offerForm } from './form.js';
 import { showAlert } from './util.js';
 import { ALERT_MESSAGE, Url } from './consts.js';
 
@@ -19,7 +17,7 @@ const getOffers = (onSuccess) => {
     });
 };
 
-const onFormSubmit = (onSuccess, onFail, body) => {
+const sendData = (onSuccess, onFail, body) => {
   fetch(
     Url.POST,
     {
@@ -30,7 +28,6 @@ const onFormSubmit = (onSuccess, onFail, body) => {
     .then((response) => {
       if (response.ok) {
         onSuccess();
-        resetPage();
       } else {
         onFail();
       }
@@ -38,16 +35,4 @@ const onFormSubmit = (onSuccess, onFail, body) => {
     .catch(() => onFail());
 };
 
-const setFormSubmit = (onSuccess, onFail) => {
-  offerForm.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-
-    onFormSubmit(
-      () => onSuccess(),
-      () => onFail(),
-      new FormData(evt.target),
-    );
-  });
-};
-
-export { getOffers, setFormSubmit };
+export { getOffers, sendData };

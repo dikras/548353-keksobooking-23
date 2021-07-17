@@ -1,9 +1,12 @@
 import { offerForm, offerFormElements, resetFormButton, address } from './form.js';
-import { ZOOM, InitialPosition, MainMarkerSize } from './consts.js';
+import { ZOOM, InitialPosition, MainMarkerSize, SIMILAR_OFFERS_COUNT, SimilarMarkerSize } from './consts.js';
+import { resetAvatarPreview } from './avatar.js';
+import { resetPhotorPreview } from './offer-photos.js';
+import { createSimilarOffersPins, createPopup } from './similar-offers.js';
 
 const mapBlock = document.querySelector('.map');
 const mapFilter = mapBlock.querySelector('.map__filters');
-const mapFiltersElement = mapFilter.querySelectorAll('.map__filter');
+const mapFiltersElements = mapFilter.querySelectorAll('.map__filter');
 
 const deactivatePage = () => {
   offerForm.classList.add('ad-form--disabled');
@@ -12,7 +15,7 @@ const deactivatePage = () => {
   });
 
   mapFilter.classList.add('map__filters--disabled');
-  mapFiltersElement.forEach((element) => {
+  mapFiltersElements.forEach((element) => {
     element.setAttribute('disabled', 'disabled');
   });
 };
@@ -26,7 +29,7 @@ const activatePage = () => {
   });
 
   mapFilter.classList.remove('map__filters--disabled');
-  mapFiltersElement.forEach((element) => {
+  mapFiltersElements.forEach((element) => {
     element.removeAttribute('disabled');
   });
 };
@@ -65,14 +68,46 @@ const mainMarker = L.marker(
 
 mainMarker.addTo(map);
 
-// Установка в поле адреса начальных координат маркера
+const markerGroup = L.layerGroup().addTo(map);
+
+const renderPins = (ads) => {
+  const similarOffersPins = createSimilarOffersPins(ads);
+
+  similarOffersPins.forEach((similarOffer) => {
+    const {lat, lng} = similarOffer;
+
+    const icon = L.icon({
+      iconUrl: './img/pin.svg',
+      iconSize: [SimilarMarkerSize.WIDTH, SimilarMarkerSize.HEIGHT],
+      iconAnchor: [SimilarMarkerSize.WIDTH / 2, SimilarMarkerSize.HEIGHT],
+    });
+
+    const marker = L.marker(
+      {
+        lat,
+        lng,
+      },
+      {
+        icon,
+      },
+    );
+    marker
+      .addTo(markerGroup)
+      .bindPopup(
+        createPopup(similarOffer),
+        {
+          keepInView: true,
+        },
+      );
+  });
+};
+
 const setMainMarkerInitialPosition = () => {
   address.value = `${mainMarker._latlng.lat}, ${mainMarker._latlng.lng}`;
 };
 
 setMainMarkerInitialPosition();
 
-// Получение текущей позиции маркера и установка в поле адреса
 const getMainMarkerCurrentPosition = (evt) => {
   const currentLatitude = evt.target.getLatLng().lat.toFixed(5);
   const currentLongitude = evt.target.getLatLng().lng.toFixed(5);
@@ -82,7 +117,6 @@ const getMainMarkerCurrentPosition = (evt) => {
 
 mainMarker.on('moveend', getMainMarkerCurrentPosition);
 
-// Сброс позиции маркера и карты
 const resetMapPosition = () => {
   mainMarker.setLatLng({
     lat: InitialPosition.LAT,
@@ -94,18 +128,26 @@ const resetMapPosition = () => {
   }, ZOOM);
 };
 
-const resetPage = () => {
+const reRenderPins = (offers) => {
+  markerGroup.clearLayers();
+  renderPins(offers.slice(0, SIMILAR_OFFERS_COUNT));
+};
+
+const resetPage = (offers) => {
+  resetAvatarPreview();
+  resetPhotorPreview();
   offerForm.reset();
   resetMapPosition();
   mapFilter.reset();
   setMainMarkerInitialPosition();
+  reRenderPins (offers);
 };
 
-resetFormButton.addEventListener('click', (evt) => {
-  evt.preventDefault();
-  resetPage();
-  resetMapPosition();
-  setMainMarkerInitialPosition();
-});
+const setResetButtonClick = (cb) => {
+  resetFormButton.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    cb();
+  });
+};
 
-export { map, resetMapPosition, resetPage, mapFilter, mapFiltersElement };
+export { map, resetMapPosition, resetPage, mapFilter, setResetButtonClick, markerGroup, renderPins };
