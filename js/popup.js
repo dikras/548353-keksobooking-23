@@ -1,4 +1,4 @@
-import { isEscEvent } from './util.js';
+import { isEscEvent } from './utils/common.js';
 
 const popupSuccessTemplate = document.querySelector('#success').content.querySelector('.success');
 const popupSuccessElement = popupSuccessTemplate.cloneNode(true);

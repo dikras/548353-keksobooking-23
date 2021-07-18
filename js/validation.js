@@ -1,37 +1,37 @@
-import { offerTitle, offerPrice } from './form.js';
+import { offerTitleElement, offerPriceElement } from './form.js';
 import { HousingPrice } from './consts.js';
 
 const titleInvalidInputHandler = () => {
-  if (offerTitle.validity.valueMissing) {
-    offerTitle.setCustomValidity('Это обязательное поле');
+  if (offerTitleElement.validity.valueMissing) {
+    offerTitleElement.setCustomValidity('Это обязательное поле');
     return;
   }
-  if (offerTitle.validity.tooShort) {
-    offerTitle.setCustomValidity('Заголовок должен состоять минимум из 30 символов симв.');
+  if (offerTitleElement.validity.tooShort) {
+    offerTitleElement.setCustomValidity('Заголовок должен состоять минимум из 30 символов симв.');
     return;
   }
-  if (offerTitle.validity.tooLong) {
-    offerTitle.setCustomValidity('Длина заголовка не должна превышать 100 символов симв.');
+  if (offerTitleElement.validity.tooLong) {
+    offerTitleElement.setCustomValidity('Длина заголовка не должна превышать 100 символов симв.');
     return;
   }
-  offerTitle.setCustomValidity('');
+  offerTitleElement.setCustomValidity('');
 };
 
 const priceInvalidInputHandler = () => {
-  if (offerPrice.validity.valueMissing) {
-    offerPrice.setCustomValidity('Это обязательное поле');
+  if (offerPriceElement.validity.valueMissing) {
+    offerPriceElement.setCustomValidity('Это обязательное поле');
     return;
   }
-  if (offerPrice.validity.rangeUnderflow) {
-    offerPrice.setCustomValidity(`Цена за ночь не может быть меньше ${HousingPrice.MIN} руб.`);
+  if (offerPriceElement.validity.rangeUnderflow) {
+    offerPriceElement.setCustomValidity(`Цена за ночь не может быть меньше ${HousingPrice.MIN} руб.`);
     return;
   }
-  if (offerPrice.validity.rangeOverflow) {
-    offerPrice.setCustomValidity(`Цена за ночь не должна превышать ${HousingPrice.MAX} руб.`);
+  if (offerPriceElement.validity.rangeOverflow) {
+    offerPriceElement.setCustomValidity(`Цена за ночь не должна превышать ${HousingPrice.MAX} руб.`);
   }
-  offerPrice.setCustomValidity('');
+  offerPriceElement.setCustomValidity('');
 };
 
-offerTitle.addEventListener('invalid', titleInvalidInputHandler);
+offerTitleElement.addEventListener('invalid', titleInvalidInputHandler);
 
-offerPrice.addEventListener('invalid', priceInvalidInputHandler);
+offerPriceElement.addEventListener('invalid', priceInvalidInputHandler);

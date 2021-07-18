@@ -1,6 +1,7 @@
-import { ALERT_SHOW_TIME } from './consts.js';
+import { ALERT_SHOW_TIME } from '../consts.js';
+import { ESC_ALL_BROWSERS, ESC_IE } from '../consts.js';
 
-const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
+const isEscEvent = (evt) => evt.key === ESC_ALL_BROWSERS || evt.key === ESC_IE;
 
 const showAlert = (message) => {
   const alertContainer = document.createElement('div');

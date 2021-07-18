@@ -1,43 +1,45 @@
-import { RoomsCapacity,  HousingMinPrice } from './consts.js';
+import { mapRoomsToGuests,  HousingMinPrice } from './consts.js';
 import { sendData } from './api.js';
 
 const offerForm = document.querySelector('.ad-form');
 const offerFormElements = offerForm.querySelectorAll('.ad-form__element');
 const resetFormButton = offerForm.querySelector('.ad-form__reset');
 
-const roomsNumber = offerForm.querySelector('#room_number');
-const guestsCapacity = offerForm.querySelector('#capacity');
-const typeHousing = offerForm.querySelector('#type');
-const offerTitle = offerForm.querySelector('#title');
-const offerPrice = offerForm.querySelector('#price');
-const timein = offerForm.querySelector('#timein');
-const timeout = offerForm.querySelector('#timeout');
-const address = offerForm.querySelector('#address');
+const roomsNumberElement = offerForm.querySelector('#room_number');
+const guestsCapacityElement = offerForm.querySelector('#capacity');
+const typeHousingElement = offerForm.querySelector('#type');
+const offerTitleElement = offerForm.querySelector('#title');
+const offerPriceElement = offerForm.querySelector('#price');
+const timeinElement = offerForm.querySelector('#timein');
+const timeoutElement = offerForm.querySelector('#timeout');
+const addressElement = offerForm.querySelector('#address');
+
+guestsCapacityElement.value = roomsNumberElement.value;
 
 const roomsSelectChangeHandler = (event) => {
-  guestsCapacity.querySelectorAll('option').forEach((guest) => {
-    guest.disabled = true;
+  guestsCapacityElement.querySelectorAll('option').forEach((guestOption) => {
+    guestOption.disabled = true;
   });
-  RoomsCapacity[event.target.value].forEach((item) => {
-    guestsCapacity.querySelector(`option[value="${item}"]`).disabled = false;
-    guestsCapacity.value = item;
+  mapRoomsToGuests[event.target.value].forEach((roomsOption) => {
+    guestsCapacityElement.querySelector(`option[value="${roomsOption}"]`).disabled = false;
+    guestsCapacityElement.value = roomsOption;
   });
 };
 
 const timeinSelectChangeHandler = (event) => {
   const timeinValue = event.target.value;
-  timeout.value = timeinValue;
+  timeoutElement.value = timeinValue;
 };
 
 const timeoutSelectChangeHandler = (event) => {
   const timeoutValue = event.target.value;
-  timein.value = timeoutValue;
+  timeinElement.value = timeoutValue;
 };
 
 const typeSelectChangeHandler = (event) => {
   const minPrice = HousingMinPrice[event.target.value.toUpperCase()];
-  offerPrice.min = minPrice;
-  offerPrice.placeholder = minPrice;
+  offerPriceElement.min = minPrice;
+  offerPriceElement.placeholder = minPrice;
 };
 
 const setFormSubmit = (onSuccess, onFail, cb) => {
@@ -53,10 +55,10 @@ const setFormSubmit = (onSuccess, onFail, cb) => {
   });
 };
 
-roomsNumber.addEventListener('change', roomsSelectChangeHandler);
-timein.addEventListener('change', timeinSelectChangeHandler);
-timeout.addEventListener('change', timeoutSelectChangeHandler);
-typeHousing.addEventListener('change', typeSelectChangeHandler);
+roomsNumberElement.addEventListener('change', roomsSelectChangeHandler);
+timeinElement.addEventListener('change', timeinSelectChangeHandler);
+timeoutElement.addEventListener('change', timeoutSelectChangeHandler);
+typeHousingElement.addEventListener('change', typeSelectChangeHandler);
 
-export { offerForm, offerFormElements, offerTitle, offerPrice, address,
+export { offerForm, offerFormElements, offerTitleElement, offerPriceElement, addressElement,
   resetFormButton, setFormSubmit };

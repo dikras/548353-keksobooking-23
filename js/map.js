@@ -1,5 +1,5 @@
-import { offerForm, offerFormElements, resetFormButton, address } from './form.js';
-import { ZOOM, InitialPosition, MainMarkerSize, SIMILAR_OFFERS_COUNT, SimilarMarkerSize } from './consts.js';
+import { offerForm, offerFormElements, resetFormButton, addressElement } from './form.js';
+import { ZOOM, InitialPosition, MainMarkerSize, SIMILAR_OFFERS_COUNT, OfferMarkerSize } from './consts.js';
 import { resetAvatarPreview } from './avatar.js';
 import { resetPhotorPreview } from './offer-photos.js';
 import { createSimilarOffersPins, createPopup } from './similar-offers.js';
@@ -20,8 +20,6 @@ const deactivatePage = () => {
   });
 };
 
-deactivatePage();
-
 const activatePage = () => {
   offerForm.classList.remove('ad-form--disabled');
   offerFormElements.forEach((element) => {
@@ -35,18 +33,19 @@ const activatePage = () => {
 };
 
 const map = L.map('map-canvas')
-  .on('load', activatePage)
   .setView({
     lat: InitialPosition.LAT,
     lng: InitialPosition.LNG,
   }, ZOOM);
 
-L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  },
-).addTo(map);
+const mapInit = () => {
+  L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    },
+  ).addTo(map);
+};
 
 const mainMarkerIcon = L.icon(
   {
@@ -78,8 +77,8 @@ const renderPins = (ads) => {
 
     const icon = L.icon({
       iconUrl: './img/pin.svg',
-      iconSize: [SimilarMarkerSize.WIDTH, SimilarMarkerSize.HEIGHT],
-      iconAnchor: [SimilarMarkerSize.WIDTH / 2, SimilarMarkerSize.HEIGHT],
+      iconSize: [OfferMarkerSize.WIDTH, OfferMarkerSize.HEIGHT],
+      iconAnchor: [OfferMarkerSize.WIDTH / 2, OfferMarkerSize.HEIGHT],
     });
 
     const marker = L.marker(
@@ -103,7 +102,7 @@ const renderPins = (ads) => {
 };
 
 const setMainMarkerInitialPosition = () => {
-  address.value = `${mainMarker._latlng.lat}, ${mainMarker._latlng.lng}`;
+  addressElement.value = `${mainMarker._latlng.lat}, ${mainMarker._latlng.lng}`;
 };
 
 setMainMarkerInitialPosition();
@@ -112,10 +111,10 @@ const getMainMarkerCurrentPosition = (evt) => {
   const currentLatitude = evt.target.getLatLng().lat.toFixed(5);
   const currentLongitude = evt.target.getLatLng().lng.toFixed(5);
 
-  address.value = `${currentLatitude}, ${currentLongitude}`;
+  addressElement.value = `${currentLatitude}, ${currentLongitude}`;
 };
 
-mainMarker.on('moveend', getMainMarkerCurrentPosition);
+mainMarker.on('move', getMainMarkerCurrentPosition);
 
 const resetMapPosition = () => {
   mainMarker.setLatLng({
@@ -150,4 +149,5 @@ const setResetButtonClick = (cb) => {
   });
 };
 
-export { map, resetMapPosition, resetPage, mapFilter, setResetButtonClick, markerGroup, renderPins };
+export { map, mapInit, resetMapPosition, resetPage, mapFilter, activatePage, setResetButtonClick,
+  markerGroup, renderPins, deactivatePage, setMainMarkerInitialPosition };

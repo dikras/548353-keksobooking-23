@@ -1,5 +1,5 @@
-import { showAlert } from './util.js';
-import { ALERT_MESSAGE, Url } from './consts.js';
+import { showAlert } from './utils/common.js';
+import { ALERT_MESSAGE, Url, POST_METHOD } from './consts.js';
 
 const getOffers = (onSuccess) => {
   fetch(Url.GET)
@@ -21,16 +21,15 @@ const sendData = (onSuccess, onFail, body) => {
   fetch(
     Url.POST,
     {
-      method: 'POST',
+      method: POST_METHOD,
       body,
     },
   )
     .then((response) => {
-      if (response.ok) {
-        onSuccess();
-      } else {
+      if (!response.ok) {
         onFail();
       }
+      return onSuccess();
     })
     .catch(() => onFail());
 };
