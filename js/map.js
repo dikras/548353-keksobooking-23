@@ -1,9 +1,24 @@
-import { offerForm, offerFormElements, resetFormButton, address } from './form.js';
-import { ZOOM, initialPosition, mainMarkerSize } from './consts.js';
+import { offerForm, offerFormElements, resetFormButton, addressElement } from './form.js';
+import { ZOOM, InitialPosition, MainMarkerSize, SIMILAR_OFFERS_COUNT, OfferMarkerSize } from './consts.js';
+import { resetAvatarPreview } from './avatar.js';
+import { resetPhotorPreview } from './offer-photos.js';
+import { createSimilarOffersPins, createPopup } from './similar-offers.js';
 
 const mapBlock = document.querySelector('.map');
-const mapFilters = mapBlock.querySelector('.map__filters');
-const mapFiltersElements = mapFilters.querySelectorAll('.map__filter');
+const mapFilter = mapBlock.querySelector('.map__filters');
+const mapFiltersElements = mapFilter.querySelectorAll('.map__filter');
+
+const deactivatePage = () => {
+  offerForm.classList.add('ad-form--disabled');
+  offerFormElements.forEach((element) => {
+    element.setAttribute('disabled', 'disabled');
+  });
+
+  mapFilter.classList.add('map__filters--disabled');
+  mapFiltersElements.forEach((element) => {
+    element.setAttribute('disabled', 'disabled');
+  });
+};
 
 const activatePage = () => {
   offerForm.classList.remove('ad-form--disabled');
@@ -11,37 +26,38 @@ const activatePage = () => {
     element.removeAttribute('disabled');
   });
 
-  mapFilters.classList.remove('map__filters--disabled');
+  mapFilter.classList.remove('map__filters--disabled');
   mapFiltersElements.forEach((element) => {
     element.removeAttribute('disabled');
   });
 };
 
 const map = L.map('map-canvas')
-  .on('load', activatePage)
   .setView({
-    lat: initialPosition.LAT,
-    lng: initialPosition.LNG,
+    lat: InitialPosition.LAT,
+    lng: InitialPosition.LNG,
   }, ZOOM);
 
-L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  },
-).addTo(map);
+const mapInit = () => {
+  L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    },
+  ).addTo(map);
+};
 
 const mainMarkerIcon = L.icon(
   {
     iconUrl: './img/main-pin.svg',
-    iconSize: [mainMarkerSize.WIDTH, mainMarkerSize.HEIGHT],
-    iconAnchor: [mainMarkerSize.WIDTH / 2, mainMarkerSize.HEIGHT],
+    iconSize: [MainMarkerSize.WIDTH, MainMarkerSize.HEIGHT],
+    iconAnchor: [MainMarkerSize.WIDTH / 2, MainMarkerSize.HEIGHT],
   },
 );
 const mainMarker = L.marker(
   {
-    lat: initialPosition.LAT,
-    lng: initialPosition.LNG,
+    lat: InitialPosition.LAT,
+    lng: InitialPosition.LNG,
   },
   {
     draggable: true,
@@ -51,47 +67,87 @@ const mainMarker = L.marker(
 
 mainMarker.addTo(map);
 
-// Установка в поле адреса начальных координат маркера
+const markerGroup = L.layerGroup().addTo(map);
+
+const renderPins = (ads) => {
+  const similarOffersPins = createSimilarOffersPins(ads);
+
+  similarOffersPins.forEach((similarOffer) => {
+    const {lat, lng} = similarOffer;
+
+    const icon = L.icon({
+      iconUrl: './img/pin.svg',
+      iconSize: [OfferMarkerSize.WIDTH, OfferMarkerSize.HEIGHT],
+      iconAnchor: [OfferMarkerSize.WIDTH / 2, OfferMarkerSize.HEIGHT],
+    });
+
+    const marker = L.marker(
+      {
+        lat,
+        lng,
+      },
+      {
+        icon,
+      },
+    );
+    marker
+      .addTo(markerGroup)
+      .bindPopup(
+        createPopup(similarOffer),
+        {
+          keepInView: true,
+        },
+      );
+  });
+};
+
 const setMainMarkerInitialPosition = () => {
-  address.value = `${mainMarker._latlng.lat}, ${mainMarker._latlng.lng}`;
+  addressElement.value = `${mainMarker._latlng.lat}, ${mainMarker._latlng.lng}`;
 };
 
 setMainMarkerInitialPosition();
 
-// Получение текущей позиции маркера и установка в поле адреса
 const getMainMarkerCurrentPosition = (evt) => {
   const currentLatitude = evt.target.getLatLng().lat.toFixed(5);
   const currentLongitude = evt.target.getLatLng().lng.toFixed(5);
 
-  address.value = `${currentLatitude}, ${currentLongitude}`;
+  addressElement.value = `${currentLatitude}, ${currentLongitude}`;
 };
 
-mainMarker.on('moveend', getMainMarkerCurrentPosition);
+mainMarker.on('move', getMainMarkerCurrentPosition);
 
-// Сброс позиции маркера и карты
 const resetMapPosition = () => {
   mainMarker.setLatLng({
-    lat: initialPosition.LAT,
-    lng: initialPosition.LNG,
+    lat: InitialPosition.LAT,
+    lng: InitialPosition.LNG,
   });
   map.setView({
-    lat: initialPosition.LAT,
-    lng: initialPosition.LNG,
+    lat: InitialPosition.LAT,
+    lng: InitialPosition.LNG,
   }, ZOOM);
 };
 
-const resetPage = () => {
-  offerForm.reset();
-  resetMapPosition();
-  mapFilters.reset();
-  setMainMarkerInitialPosition();
+const reRenderPins = (offers) => {
+  markerGroup.clearLayers();
+  renderPins(offers.slice(0, SIMILAR_OFFERS_COUNT));
 };
 
-resetFormButton.addEventListener('click', (evt) => {
-  evt.preventDefault();
-  resetPage();
+const resetPage = (offers) => {
+  resetAvatarPreview();
+  resetPhotorPreview();
+  offerForm.reset();
   resetMapPosition();
+  mapFilter.reset();
   setMainMarkerInitialPosition();
-});
+  reRenderPins (offers);
+};
 
-export { map, initialPosition, resetMapPosition, resetPage, mapFilters, mapFiltersElements };
+const setResetButtonClick = (cb) => {
+  resetFormButton.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    cb();
+  });
+};
+
+export { map, mapInit, resetMapPosition, resetPage, mapFilter, activatePage, setResetButtonClick,
+  markerGroup, renderPins, deactivatePage, setMainMarkerInitialPosition };

@@ -1,10 +1,10 @@
-import { FILE_TYPES } from './consts.js';
+import { FILE_TYPES, AVATAR_URL } from './consts.js';
 import { offerForm } from './form.js';
 
 const avatarChooser = offerForm.querySelector('.ad-form-header__input');
 const avatarPreview = offerForm.querySelector('.ad-form-header__preview img');
 
-avatarChooser.addEventListener('change', () => {
+const avatarUploadHandler = () => {
   const file = avatarChooser.files[0];
   const fileName = file.name.toLowerCase();
 
@@ -19,4 +19,12 @@ avatarChooser.addEventListener('change', () => {
 
     reader.readAsDataURL(file);
   }
-});
+};
+
+avatarChooser.addEventListener('change', avatarUploadHandler);
+
+const resetAvatarPreview = () => {
+  avatarPreview.src = AVATAR_URL;
+};
+
+export { resetAvatarPreview };

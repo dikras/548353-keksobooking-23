@@ -1,39 +1,47 @@
 const ZOOM = 10;
 
+const ESC_IE = 'Esc';
+const ESC_ALL_BROWSERS = 'Escape';
+
 const ALERT_SHOW_TIME = 5000;
 const ALERT_MESSAGE = 'Не удалось загрузить данные';
-
-const URL_GET = 'https://23.javascript.pages.academy/keksobooking/data';
-const URL_POST = 'https://23.javascript.pages.academy/keksobooking';
 
 const SIMILAR_OFFERS_COUNT = 10;
 const ANY_VALUE = 'any';
 const RADIX = 10;
 
-const MIN_LENGTH_TITLE = 30;
-const MAX_LENGTH_TITLE = 100;
-
-const MIN_PRICE = 0;
-const MAX_PRICE = 1000000;
+const RERENDER_DELAY = 500;
 
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
-const similarMarkerSize = {
+const HousingPrice = {
+  MIN: 0,
+  Max: 1000000,
+};
+
+const Url = {
+  GET: 'https://23.javascript.pages.academy/keksobooking/data',
+  POST: 'https://23.javascript.pages.academy/keksobooking',
+};
+
+const POST_METHOD = 'POST';
+
+const OfferMarkerSize = {
   WIDTH: 40,
   HEIGHT: 40,
 };
 
-const initialPosition = {
+const InitialPosition = {
   LAT: 35.67980,
   LNG: 139.76941,
 };
 
-const mainMarkerSize = {
+const MainMarkerSize = {
   WIDTH: 52,
   HEIGHT: 52,
 };
 
-const RoomsCapacity = {
+const mapRoomsToGuests = {
   1: [1],
   2: [1, 2],
   3: [1, 2, 3],
@@ -63,6 +71,14 @@ const HousingPriceRange = {
   },
 };
 
-export { ZOOM, similarMarkerSize, initialPosition, mainMarkerSize,  SIMILAR_OFFERS_COUNT,
-  ANY_VALUE, RADIX, HousingPriceRange, ALERT_SHOW_TIME, ALERT_MESSAGE, RoomsCapacity,  HousingMinPrice,
-  MIN_LENGTH_TITLE, MAX_LENGTH_TITLE, MIN_PRICE, MAX_PRICE, URL_GET, URL_POST, FILE_TYPES };
+const PreviewPhotoSize = {
+  WIDTH: '70',
+  HEIGHT: '70',
+};
+
+const AVATAR_URL = 'img/muffin-grey.svg';
+
+export { ZOOM, OfferMarkerSize, InitialPosition, MainMarkerSize, ESC_IE,
+  ESC_ALL_BROWSERS, SIMILAR_OFFERS_COUNT, ANY_VALUE, RADIX, HousingPriceRange,
+  ALERT_SHOW_TIME, ALERT_MESSAGE, mapRoomsToGuests,  HousingMinPrice, POST_METHOD,
+  HousingPrice, Url, FILE_TYPES, PreviewPhotoSize, AVATAR_URL, RERENDER_DELAY };
