@@ -21,21 +21,13 @@ const filterByFeatures = (ad) => {
 };
 
 const filterOffers = (offer) => {
-  if (housingTypeFilter.value !== ANY_VALUE && housingTypeFilter.value !== offer.offer.type) {
-    return false;
-  }
   const filteringPrice = HousingPriceRange[housingPriceFilter.value.toUpperCase()];
-  if (housingPriceFilter.value !== ANY_VALUE && (offer.offer.price < filteringPrice.MIN || offer.offer.price > filteringPrice.MAX)) {
-    return false;
-  }
-  if (roomsNumberFilter.value !== ANY_VALUE && parseInt(roomsNumberFilter.value, RADIX) !== offer.offer.rooms) {
-    return false;
-  }
-  if (guestsNumberFilter.value !== ANY_VALUE && parseInt(guestsNumberFilter.value, RADIX) !== offer.offer.guests) {
-    return false;
-  }
 
-  if (!filterByFeatures(offer)) {
+  if (housingTypeFilter.value !== ANY_VALUE && housingTypeFilter.value !== offer.offer.type || 
+  housingPriceFilter.value !== ANY_VALUE && (offer.offer.price < filteringPrice.MIN || offer.offer.price > filteringPrice.MAX) ||
+  roomsNumberFilter.value !== ANY_VALUE && parseInt(roomsNumberFilter.value, RADIX) !== offer.offer.rooms ||
+  guestsNumberFilter.value !== ANY_VALUE && parseInt(guestsNumberFilter.value, RADIX) !== offer.offer.guests ||
+  !filterByFeatures(offer)) {
     return false;
   }
 

@@ -8,7 +8,7 @@ const photoPreview = document.createElement('img');
 photoPreview.width = PreviewPhotoSize.WIDTH;
 photoPreview.height = PreviewPhotoSize.HEIGHT;
 
-const previewPhotoUploadHandler = () => {
+const handlePreviewPhotoUpload = () => {
   photoPreviewContainer.insertAdjacentElement('afterbegin', photoPreview);
 
   const file = photoChooser.files[0];
@@ -27,7 +27,7 @@ const previewPhotoUploadHandler = () => {
   }
 };
 
-photoChooser.addEventListener('change', previewPhotoUploadHandler);
+photoChooser.addEventListener('change', handlePreviewPhotoUpload);
 
 const resetPhotorPreview = () => {
   photoPreview.remove();

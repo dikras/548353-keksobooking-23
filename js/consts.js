@@ -1,4 +1,4 @@
-const ZOOM = 10;
+const ZOOM = 12;
 
 const ESC_IE = 'Esc';
 const ESC_ALL_BROWSERS = 'Escape';
@@ -9,6 +9,8 @@ const ALERT_MESSAGE = 'Не удалось загрузить данные';
 const SIMILAR_OFFERS_COUNT = 10;
 const ANY_VALUE = 'any';
 const RADIX = 10;
+
+const DEFAULT_DELAY = 500;
 
 const RERENDER_DELAY = 500;
 
@@ -81,4 +83,5 @@ const AVATAR_URL = 'img/muffin-grey.svg';
 export { ZOOM, OfferMarkerSize, InitialPosition, MainMarkerSize, ESC_IE,
   ESC_ALL_BROWSERS, SIMILAR_OFFERS_COUNT, ANY_VALUE, RADIX, HousingPriceRange,
   ALERT_SHOW_TIME, ALERT_MESSAGE, mapRoomsToGuests,  HousingMinPrice, POST_METHOD,
-  HousingPrice, Url, FILE_TYPES, PreviewPhotoSize, AVATAR_URL, RERENDER_DELAY };
+  HousingPrice, Url, FILE_TYPES, PreviewPhotoSize, AVATAR_URL, RERENDER_DELAY,
+  DEFAULT_DELAY };

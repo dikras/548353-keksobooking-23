@@ -14,9 +14,18 @@ const timeinElement = offerForm.querySelector('#timein');
 const timeoutElement = offerForm.querySelector('#timeout');
 const addressElement = offerForm.querySelector('#address');
 
-guestsCapacityElement.value = roomsNumberElement.value;
+const setInitialGuestsNumber = () => {
+  guestsCapacityElement.value = roomsNumberElement.value;
+};
 
-const roomsSelectChangeHandler = (event) => {
+const setInitialPriceValue = () => {
+  offerPriceElement.placeholder = HousingMinPrice[typeHousingElement.value.toUpperCase()];
+}
+
+setInitialGuestsNumber();
+setInitialPriceValue();
+
+const handleRoomsOption = (event) => {
   guestsCapacityElement.querySelectorAll('option').forEach((guestOption) => {
     guestOption.disabled = true;
   });
@@ -26,20 +35,19 @@ const roomsSelectChangeHandler = (event) => {
   });
 };
 
-const timeinSelectChangeHandler = (event) => {
-  const timeinValue = event.target.value;
-  timeoutElement.value = timeinValue;
+const handleTimeinOption = (event) => {
+  timeoutElement.value = event.target.value;
 };
 
-const timeoutSelectChangeHandler = (event) => {
-  const timeoutValue = event.target.value;
-  timeinElement.value = timeoutValue;
+const handleTimeoutOption = (event) => {
+  timeinElement.value = event.target.value;
 };
 
-const typeSelectChangeHandler = (event) => {
+const handleTypeOption = (event) => {
   const minPrice = HousingMinPrice[event.target.value.toUpperCase()];
   offerPriceElement.min = minPrice;
   offerPriceElement.placeholder = minPrice;
+  offerPriceElement.setAttribute("min", minPrice);
 };
 
 const setFormSubmit = (onSuccess, onFail, cb) => {
@@ -55,10 +63,10 @@ const setFormSubmit = (onSuccess, onFail, cb) => {
   });
 };
 
-roomsNumberElement.addEventListener('change', roomsSelectChangeHandler);
-timeinElement.addEventListener('change', timeinSelectChangeHandler);
-timeoutElement.addEventListener('change', timeoutSelectChangeHandler);
-typeHousingElement.addEventListener('change', typeSelectChangeHandler);
+roomsNumberElement.addEventListener('change', handleRoomsOption);
+timeinElement.addEventListener('change', handleTimeinOption);
+timeoutElement.addEventListener('change', handleTimeoutOption);
+typeHousingElement.addEventListener('change', handleTypeOption);
 
 export { offerForm, offerFormElements, offerTitleElement, offerPriceElement, addressElement,
-  resetFormButton, setFormSubmit };
+  resetFormButton, setInitialGuestsNumber, setInitialPriceValue, setFormSubmit };

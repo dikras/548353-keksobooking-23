@@ -6,45 +6,45 @@ const popupErrorTemplate = document.querySelector('#error').content.querySelecto
 const popupErrorElement = popupErrorTemplate.cloneNode(true);
 const errorButton = popupErrorElement.querySelector('.error__button');
 
-const successPopupClickCloseHandler = () => {
+const handleSuccessPopupClickClose = () => {
   popupSuccessElement.classList.add('hidden');
-  document.removeEventListener('click', successPopupClickCloseHandler);
+  document.removeEventListener('click', handleSuccessPopupClickClose);
 };
 
-const errorPopupClickCloseHandler = () => {
+const handleErrorPopupClickClose = () => {
   popupErrorElement.classList.add('hidden');
-  document.removeEventListener('click', errorPopupClickCloseHandler);
-  document.removeEventListener('keydown', errorPopupClickCloseHandler);
+  document.removeEventListener('click', handleErrorPopupClickClose);
+  document.removeEventListener('keydown', handleErrorPopupClickClose);
 };
 
-const successPopupEscKeydownHandler = (evt) => {
+const handleSuccessPopupEscKeydown = (evt) => {
   if (isEscEvent(evt)) {
     evt.preventDefault();
-    successPopupClickCloseHandler();
-    document.removeEventListener('keydown', successPopupEscKeydownHandler);
+    handleSuccessPopupClickClose();
+    document.removeEventListener('keydown', handleSuccessPopupEscKeydown);
   }
 };
 
-const errorPopupEscKeydownHandler = (evt) => {
+const handleErrorPopupEscKeydown = (evt) => {
   if (isEscEvent(evt)) {
     evt.preventDefault();
-    errorPopupClickCloseHandler();
-    document.removeEventListener('keydown', errorPopupEscKeydownHandler);
+    handleErrorPopupClickClose();
+    document.removeEventListener('keydown', handleErrorPopupEscKeydown);
   }
 };
 
 const openSuccessPopup = () => {
   document.body.insertAdjacentElement('beforeend', popupSuccessElement);
-  document.addEventListener('keydown', successPopupEscKeydownHandler);
-  document.addEventListener('click', successPopupClickCloseHandler);
+  document.addEventListener('keydown', handleSuccessPopupEscKeydown);
+  document.addEventListener('click', handleSuccessPopupClickClose);
 };
 
 const openErrorPopup = () => {
   document.body.insertAdjacentElement('beforeend', popupErrorElement);
-  document.addEventListener('keydown', errorPopupEscKeydownHandler);
-  document.addEventListener('click', errorPopupClickCloseHandler);
+  document.addEventListener('keydown', handleErrorPopupEscKeydown);
+  document.addEventListener('click', handleErrorPopupClickClose);
 };
 
-errorButton.addEventListener('click', errorPopupClickCloseHandler);
+errorButton.addEventListener('click', handleErrorPopupClickClose);
 
 export { openSuccessPopup, openErrorPopup };

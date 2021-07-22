@@ -1,5 +1,5 @@
 const createSimilarPin = (item) => {
-  const pin = {
+  return {
     src: item.author.avatar,
     title: item.offer.title,
     address: item.offer.address,
@@ -15,12 +15,10 @@ const createSimilarPin = (item) => {
     lng: item.location.lng,
     description: item.offer.description,
   };
-  return pin;
 };
 
 const createSimilarOffersPins = (ads) => {
-  const pins = ads.map((ad) => createSimilarPin(ad));
-  return pins;
+  return ads.map((ad) => createSimilarPin(ad));
 };
 
 const createPopup = (ad) => {

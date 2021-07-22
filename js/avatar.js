@@ -4,7 +4,7 @@ import { offerForm } from './form.js';
 const avatarChooser = offerForm.querySelector('.ad-form-header__input');
 const avatarPreview = offerForm.querySelector('.ad-form-header__preview img');
 
-const avatarUploadHandler = () => {
+const handleAvatarUpload = () => {
   const file = avatarChooser.files[0];
   const fileName = file.name.toLowerCase();
 
@@ -21,7 +21,7 @@ const avatarUploadHandler = () => {
   }
 };
 
-avatarChooser.addEventListener('change', avatarUploadHandler);
+avatarChooser.addEventListener('change', handleAvatarUpload);
 
 const resetAvatarPreview = () => {
   avatarPreview.src = AVATAR_URL;
