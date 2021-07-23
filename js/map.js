@@ -1,13 +1,15 @@
 import { offerForm, offerFormElements, resetFormButton, addressElement,
   setInitialGuestsNumber, setInitialPriceValue } from './form.js';
-import { ZOOM, InitialPosition, MainMarkerSize, SIMILAR_OFFERS_COUNT, OfferMarkerSize } from './consts.js';
+import { ZOOM, InitialPosition, MainMarkerSize, SIMILAR_OFFERS_COUNT,
+  RERENDER_DELAY, OfferMarkerSize } from './consts.js';
 import { resetAvatarPreview } from './avatar.js';
 import { resetPhotorPreview } from './offer-photos.js';
 import { createSimilarOffersPins, createPopup } from './similar-offers.js';
+import { getOffers } from './api.js';
+import { mapBlock, mapFilter, setFilterChange, changeMapFilters } from './filters.js';
+import { debounce } from './utils/debounce.js';
 
-const mapBlock = document.querySelector('.map');
-const mapFilter = mapBlock.querySelector('.map__filters');
-const mapFiltersElements = mapFilter.querySelectorAll('.map__filter');
+const mapFiltersElements = mapBlock.querySelectorAll('.map__filter');
 
 const disablePage = () => {
   offerForm.classList.add('ad-form--disabled');
@@ -55,6 +57,7 @@ const mainMarkerIcon = L.icon(
     iconAnchor: [MainMarkerSize.WIDTH / 2, MainMarkerSize.HEIGHT],
   },
 );
+
 const mainMarker = L.marker(
   {
     lat: InitialPosition.LAT,
@@ -92,14 +95,29 @@ const renderPins = (ads) => {
         icon,
       },
     )
-    .addTo(markerGroup)
-    .bindPopup(
-      createPopup(similarOffer),
-      {
-        keepInView: true,
-      },
-    );
+      .addTo(markerGroup)
+      .bindPopup(
+        createPopup(similarOffer),
+        {
+          keepInView: true,
+        },
+      );
   });
+};
+
+let dataOffers;
+
+map.whenReady(() => {
+  getOffers((offers) => {
+    dataOffers = offers;
+    renderPins(dataOffers.slice(0, SIMILAR_OFFERS_COUNT));
+    setFilterChange(() => debounce(changeMapFilters(dataOffers), RERENDER_DELAY));
+  });
+});
+
+const renderInitialPins = () => {
+  markerGroup.clearLayers();
+  renderPins(dataOffers.slice(0, SIMILAR_OFFERS_COUNT));
 };
 
 const setMainMarkerInitialPosition = () => {
@@ -128,12 +146,7 @@ const resetMapPosition = () => {
   }, ZOOM);
 };
 
-const renderInitalPins = (offers) => {
-  markerGroup.clearLayers();
-  renderPins(offers.slice(0, SIMILAR_OFFERS_COUNT));
-};
-
-const resetPage = (offers) => {
+const resetPage = () => {
   resetAvatarPreview();
   resetPhotorPreview();
   offerForm.reset();
@@ -142,15 +155,13 @@ const resetPage = (offers) => {
   resetMapPosition();
   mapFilter.reset();
   setMainMarkerInitialPosition();
-  renderInitalPins(offers);
+  renderInitialPins();
 };
 
-const setResetButtonClick = (cb) => {
-  resetFormButton.addEventListener('click', (evt) => {
-    evt.preventDefault();
-    cb();
-  });
-};
+resetFormButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  resetPage();
+});
 
-export { map, mapInit, resetMapPosition, resetPage, mapFilter, activatePage, setResetButtonClick,
+export { map, mapInit, resetMapPosition, resetPage, mapFilter, activatePage,
   markerGroup, renderPins, disablePage, setMainMarkerInitialPosition };

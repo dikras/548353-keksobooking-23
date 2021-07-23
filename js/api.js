@@ -26,12 +26,11 @@ const sendData = (onSuccess, onFail, body) => {
     },
   )
     .then((response) => {
-      if (!response.ok) {
-        onFail();
-      }
-      return onSuccess();
+      (response.ok) ? onSuccess() : onFail();
     })
-    .catch(() => onFail());
+    .catch(() => {
+      onFail();
+    });
 };
 
 export { getOffers, sendData };

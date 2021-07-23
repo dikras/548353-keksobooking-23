@@ -1,5 +1,8 @@
-import { renderPins, markerGroup, mapFilter } from './map.js';
+import { renderPins, markerGroup } from './map.js';
 import { SIMILAR_OFFERS_COUNT, ANY_VALUE, RADIX, HousingPriceRange } from './consts.js';
+
+const mapBlock = document.querySelector('.map');
+const mapFilter = mapBlock.querySelector('.map__filters');
 
 const housingTypeFilter = mapFilter.querySelector('#housing-type');
 const housingPriceFilter = mapFilter.querySelector('#housing-price');
@@ -23,7 +26,7 @@ const filterByFeatures = (ad) => {
 const filterOffers = (offer) => {
   const filteringPrice = HousingPriceRange[housingPriceFilter.value.toUpperCase()];
 
-  if (housingTypeFilter.value !== ANY_VALUE && housingTypeFilter.value !== offer.offer.type || 
+  if (housingTypeFilter.value !== ANY_VALUE && housingTypeFilter.value !== offer.offer.type ||
   housingPriceFilter.value !== ANY_VALUE && (offer.offer.price < filteringPrice.MIN || offer.offer.price > filteringPrice.MAX) ||
   roomsNumberFilter.value !== ANY_VALUE && parseInt(roomsNumberFilter.value, RADIX) !== offer.offer.rooms ||
   guestsNumberFilter.value !== ANY_VALUE && parseInt(guestsNumberFilter.value, RADIX) !== offer.offer.guests ||
@@ -44,4 +47,4 @@ const setFilterChange = (cb) => {
   mapFilter.addEventListener('change', cb);
 };
 
-export { setFilterChange, changeMapFilters };
+export { mapBlock, mapFilter, setFilterChange, changeMapFilters, filterOffers };

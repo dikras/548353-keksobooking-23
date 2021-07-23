@@ -1,5 +1,7 @@
 import { mapRoomsToGuests,  HousingMinPrice } from './consts.js';
 import { sendData } from './api.js';
+import { openSuccessPopup, openErrorPopup } from './popup.js';
+import { resetPage } from './map.js';
 
 const offerForm = document.querySelector('.ad-form');
 const offerFormElements = offerForm.querySelectorAll('.ad-form__element');
@@ -20,7 +22,7 @@ const setInitialGuestsNumber = () => {
 
 const setInitialPriceValue = () => {
   offerPriceElement.placeholder = HousingMinPrice[typeHousingElement.value.toUpperCase()];
-}
+};
 
 setInitialGuestsNumber();
 setInitialPriceValue();
@@ -47,21 +49,22 @@ const handleTypeOption = (event) => {
   const minPrice = HousingMinPrice[event.target.value.toUpperCase()];
   offerPriceElement.min = minPrice;
   offerPriceElement.placeholder = minPrice;
-  offerPriceElement.setAttribute("min", minPrice);
+  offerPriceElement.setAttribute('min', minPrice);
 };
 
-const setFormSubmit = (onSuccess, onFail, cb) => {
-  offerForm.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-
-    sendData(
-      () => onSuccess(),
-      () => onFail(),
-      new FormData(evt.target),
-    );
-    cb;
-  });
+const sendSuccess = () => {
+  openSuccessPopup();
+  resetPage();
 };
+
+offerForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+
+  const formData = new FormData(evt.target);
+
+  sendData(sendSuccess, openErrorPopup, formData);
+
+});
 
 roomsNumberElement.addEventListener('change', handleRoomsOption);
 timeinElement.addEventListener('change', handleTimeinOption);
@@ -69,4 +72,4 @@ timeoutElement.addEventListener('change', handleTimeoutOption);
 typeHousingElement.addEventListener('change', handleTypeOption);
 
 export { offerForm, offerFormElements, offerTitleElement, offerPriceElement, addressElement,
-  resetFormButton, setInitialGuestsNumber, setInitialPriceValue, setFormSubmit };
+  resetFormButton, setInitialGuestsNumber, setInitialPriceValue };
